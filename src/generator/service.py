@@ -25,16 +25,15 @@ class DocumentGenerationService:
     整合GitHub数据获取、项目分类和文档生成功能
     """
     
-    def __init__(self, config: Optional[Dict] = None):
+    def __init__(self, config: Optional[Config] = None):
         """
         初始化文档生成服务
         
         Args:
-            config: 配置字典，如果为None则从配置文件加载
+            config: 配置对象，如果为None则从配置文件加载
         """
         if config is None:
-            config_manager = Config()
-            config = config_manager.config
+            config = Config()
         
         self.config = config
         
@@ -42,8 +41,8 @@ class DocumentGenerationService:
         self.github_service = GitHubService(config)
         self.classifier = ProjectClassifier(config)
         self.template_manager = TemplateManager()
-        self.builder = MarkdownBuilder(self.template_manager, config)
-        self.exporter = DocumentExporter(config)
+        self.builder = MarkdownBuilder(self.template_manager, config.config)
+        self.exporter = DocumentExporter(config.config)
         
         logger.info("文档生成服务初始化完成")
     

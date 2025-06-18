@@ -73,6 +73,10 @@ def generate(ctx, token, config, output, output_format, no_cache, dry_run, max_r
             click.echo("❌ 错误: 需要GitHub Token。请设置GITHUB_TOKEN环境变量或使用--token参数", err=True)
             raise click.Abort()
         
+        # 设置token到环境变量（如果通过参数提供）
+        if token:
+            os.environ['GITHUB_TOKEN'] = token
+        
         # 加载配置
         try:
             config_manager = Config(config)
@@ -100,11 +104,11 @@ def generate(ctx, token, config, output, output_format, no_cache, dry_run, max_r
         
         # 1. 获取星标项目
         progress.step("初始化GitHub服务...")
-        github_service = GitHubService(config_obj, token)
+        github_service = GitHubService(config_manager)
         
         progress.step(LogMessages.fetching_repos("所有"))
         with click.progressbar(label='获取星标项目', length=100) as bar:
-            repos = github_service.get_all_starred_repos()
+            repos = github_service.fetch_starred_repos()
             bar.update(100)
         
         if max_repos and max_repos < len(repos):
@@ -127,7 +131,7 @@ def generate(ctx, token, config, output, output_format, no_cache, dry_run, max_r
         
         # 3. 生成文档
         progress.step(LogMessages.generating_docs(output_format))
-        doc_service = DocumentGenerationService(config_obj)
+        doc_service = DocumentGenerationService(config_manager)
         
         # 生成文档
         result = doc_service.generate_document(classified_repos)
@@ -375,7 +379,9 @@ def _save_output(result: Dict[str, Any], output_path: Path,
     if output_format in ['json', 'both']:
         json_file = output_path / 'starred_repos.json'
         with open(json_file, 'w', encoding='utf-8') as f:
-            json.dump(result['data'], f, indent=2, ensure_ascii=False, default=str)
+            # 使用content字段中的json数据，如果没有则使用整个result
+            json_data = result['content'].get('json', result)
+            json.dump(json_data, f, indent=2, ensure_ascii=False, default=str)
         logger.info(f"📋 JSON数据已保存: {json_file}")
 
 

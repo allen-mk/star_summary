@@ -45,15 +45,20 @@ def list_repos(token, config, output_format, limit, sort_by):
     获取并显示GitHub星标项目列表，支持排序和格式化输出。
     """
     try:
+        # 设置token到环境变量
+        if token:
+            import os
+            os.environ['GITHUB_TOKEN'] = token
+            
         # 加载配置
         config_manager = Config(config)
         config_obj = config_manager.config
         
         # 初始化GitHub服务
-        github_service = GitHubService(config_obj, token)
+        github_service = GitHubService(config_manager)
         
         click.echo("📡 正在获取星标项目...")
-        repos = github_service.get_all_starred_repos()
+        repos = github_service.fetch_starred_repos()
         
         # 排序
         if sort_by == 'stars':
@@ -97,13 +102,18 @@ def classify(token, config, method, repo_name):
     对指定项目或所有星标项目进行分类测试。
     """
     try:
+        # 设置token到环境变量
+        if token:
+            import os
+            os.environ['GITHUB_TOKEN'] = token
+            
         # 加载配置
         config_manager = Config(config)
         config_obj = config_manager.config
         config_obj['classifier']['default_method'] = method
         
         # 初始化服务
-        github_service = GitHubService(config_obj, token)
+        github_service = GitHubService(config_manager)
         classifier = ProjectClassifier(config_obj)
         
         if repo_name:
@@ -138,7 +148,7 @@ def classify(token, config, method, repo_name):
         else:
             # 批量分类测试
             click.echo("📡 正在获取星标项目...")
-            repos = github_service.get_all_starred_repos()
+            repos = github_service.fetch_starred_repos()
             
             if len(repos) > 10:
                 click.echo(f"⚠️ 项目数量较多 ({len(repos)}个)，仅显示前10个分类结果")
