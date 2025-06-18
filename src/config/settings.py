@@ -114,7 +114,32 @@ class Config:
             'github': {
                 'token_env': 'GITHUB_TOKEN',
                 'username': '',
-                'api_base_url': 'https://api.github.com'
+                'api_base_url': 'https://api.github.com',
+                'timeout': 30,
+                'retry_count': 3,
+                'retry_delay': 1,
+                'per_page': 100,
+                'rate_limit': {
+                    'check_threshold': 100,
+                    'check_interval': 300,
+                    'wait_on_limit': True,
+                    'max_wait_time': 3600
+                }
+            },
+            'fetcher': {
+                'batch_size': 100,
+                'show_progress': True,
+                'include_forks': True,
+                'include_archived': True,
+                'max_repos': None,
+                'fields': [
+                    'id', 'name', 'full_name', 'description', 'html_url',
+                    'clone_url', 'ssh_url', 'homepage', 'private', 'fork',
+                    'archived', 'disabled', 'stargazers_count', 'watchers_count',
+                    'forks_count', 'open_issues_count', 'size', 'language',
+                    'topics', 'created_at', 'updated_at', 'pushed_at',
+                    'license', 'owner'
+                ]
             },
             'classification': {
                 'method': 'hybrid',  # rules, ai, hybrid
@@ -137,11 +162,17 @@ class Config:
             'cache': {
                 'enabled': True,
                 'ttl_hours': 24,
-                'cache_dir': '.cache'
+                'cache_dir': '.cache',
+                'format': 'json',
+                'auto_cleanup': True,
+                'max_age_hours': 168  # 7 days
             },
             'logging': {
                 'level': 'INFO',
-                'file': 'star_summary.log'
+                'file': 'star_summary.log',
+                'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                'max_size_mb': 10,
+                'backup_count': 3
             }
         }
     
@@ -166,6 +197,73 @@ class Config:
         """
         key_env = self.get('ai_classification.api_key_env', 'OPENAI_API_KEY')
         return self.get_env(key_env)
+    
+    @property
+    def github_config(self) -> Dict[str, Any]:
+        """
+        获取GitHub配置
+        
+        Returns:
+            GitHub配置字典
+        """
+        return self.get('github', {})
+    
+    @property
+    def fetcher_config(self) -> Dict[str, Any]:
+        """
+        获取数据获取器配置
+        
+        Returns:
+            获取器配置字典
+        """
+        return self.get('fetcher', {})
+    
+    @property
+    def cache_config(self) -> Dict[str, Any]:
+        """
+        获取缓存配置
+        
+        Returns:
+            缓存配置字典
+        """
+        return self.get('cache', {})
+    
+    def get_github_client_config(self) -> Dict[str, Any]:
+        """
+        获取GitHub客户端配置
+        
+        Returns:
+            客户端配置字典
+        """
+        github_config = self.github_config
+        return {
+            'token': self.github_token,
+            'base_url': github_config.get('api_base_url', 'https://api.github.com'),
+            'timeout': github_config.get('timeout', 30),
+            'retry': {
+                'count': github_config.get('retry_count', 3),
+                'delay': github_config.get('retry_delay', 1)
+            },
+            'per_page': github_config.get('per_page', 100),
+            'rate_limit': github_config.get('rate_limit', {})
+        }
+    
+    def get_cache_manager_config(self) -> Dict[str, Any]:
+        """
+        获取缓存管理器配置
+        
+        Returns:
+            缓存管理器配置字典
+        """
+        cache_config = self.cache_config
+        return {
+            'enabled': cache_config.get('enabled', True),
+            'cache_dir': cache_config.get('cache_dir', '.cache'),
+            'format': cache_config.get('format', 'json'),
+            'ttl_hours': cache_config.get('ttl_hours', 24),
+            'auto_cleanup': cache_config.get('auto_cleanup', True),
+            'max_age_hours': cache_config.get('max_age_hours', 168)
+        }
     
     def validate(self) -> bool:
         """

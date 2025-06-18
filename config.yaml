@@ -5,6 +5,48 @@ github:
   token_env: "GITHUB_TOKEN"  # GitHub Token 环境变量名
   username: ""  # GitHub 用户名（可选，从 token 自动获取）
   api_base_url: "https://api.github.com"  # GitHub API 基础URL
+  timeout: 30  # 请求超时时间（秒）
+  retry_count: 3  # 重试次数
+  retry_delay: 1  # 重试延迟（秒）
+  per_page: 100  # 每页获取的项目数
+  rate_limit:
+    check_threshold: 100  # 速率限制检查阈值
+    check_interval: 300  # 检查间隔（秒）
+    wait_on_limit: true  # 遇到限制时是否等待
+    max_wait_time: 3600  # 最大等待时间（秒）
+
+# 数据获取器配置
+fetcher:
+  batch_size: 100  # 批次大小
+  show_progress: true  # 是否显示进度条
+  include_forks: true  # 是否包含分叉项目
+  include_archived: true  # 是否包含归档项目
+  max_repos: null  # 最大获取项目数（null为不限制）
+  fields:  # 要提取的数据字段
+    - "id"
+    - "name"
+    - "full_name"
+    - "description"
+    - "html_url"
+    - "clone_url"
+    - "ssh_url"
+    - "homepage"
+    - "private"
+    - "fork"
+    - "archived"
+    - "disabled"
+    - "stargazers_count"
+    - "watchers_count"
+    - "forks_count"
+    - "open_issues_count"
+    - "size"
+    - "language"
+    - "topics"
+    - "created_at"
+    - "updated_at"
+    - "pushed_at"
+    - "license"
+    - "owner"
 
 # 分类配置
 classification:
@@ -52,6 +94,9 @@ cache:
   enabled: true  # 是否启用缓存
   ttl_hours: 24  # 缓存有效期（小时）
   cache_dir: ".cache"  # 缓存目录
+  format: "json"  # 缓存格式: json, pickle
+  auto_cleanup: true  # 是否自动清理过期缓存
+  max_age_hours: 168  # 最大缓存时间（7天）
 
 # 日志配置
 logging:
