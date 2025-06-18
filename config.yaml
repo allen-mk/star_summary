@@ -1,0 +1,96 @@
+# GitHub 星标项目分类整理工具配置文件
+
+# GitHub API 配置
+github:
+  token_env: "GITHUB_TOKEN"  # GitHub Token 环境变量名
+  username: ""  # GitHub 用户名（可选，从 token 自动获取）
+  api_base_url: "https://api.github.com"  # GitHub API 基础URL
+
+# 分类配置
+classification:
+  method: "hybrid"  # 分类方法: rules, ai, hybrid
+
+# AI 分类配置（可选）
+ai_classification:
+  enabled: true  # 是否启用 AI 分类
+  api_key_env: "OPENAI_API_KEY"  # OpenAI API Key 环境变量名
+  model: "gpt-3.5-turbo"  # 使用的模型: gpt-3.5-turbo, gpt-4
+  always_use: false  # 是否总是使用 AI 分类
+  fallback_to_rules: true  # AI 失败时回退到规则分类
+  batch_size: 5  # 批处理大小
+  max_retries: 3  # 最大重试次数
+
+# 输出配置
+output:
+  format: "markdown"  # 输出格式: markdown, json, both
+  base_dir: "output"  # 输出基础目录
+  
+  # Markdown 输出配置
+  markdown:
+    filename: "README.md"  # 默认输出文件名（改为README.md）
+    template: "templates/main.md"  # 模板文件路径
+    include_toc: true  # 是否包含目录
+    
+  # JSON 输出配置  
+  json:
+    filename: "starred-projects.json"  # JSON数据文件名
+    pretty_print: true  # 是否格式化输出
+    
+  # 文件路径配置（支持多种输出路径）
+  paths:
+    # 项目根目录的主README
+    main_readme: "README.md"  
+    # 文档目录的README
+    docs_readme: "docs/README.md"  
+    # 分类详情目录
+    categories_dir: "output/categories"
+    # 原始数据备份
+    raw_data: "output/raw/starred-repos.json"
+
+# 缓存配置
+cache:
+  enabled: true  # 是否启用缓存
+  ttl_hours: 24  # 缓存有效期（小时）
+  cache_dir: ".cache"  # 缓存目录
+
+# 日志配置
+logging:
+  level: "INFO"  # 日志级别: DEBUG, INFO, WARNING, ERROR
+  file: "star_summary.log"  # 日志文件路径
+
+# 分类规则配置
+categories:
+  # 技术栈分类
+  tech_stack:
+    web-frontend:
+      - "react"
+      - "vue"
+      - "angular"
+      - "svelte"
+    web-backend:
+      - "express"
+      - "django"
+      - "flask"
+      - "fastapi"
+    mobile:
+      - "flutter"
+      - "react-native"
+      - "swift"
+      - "kotlin"
+    ai-ml:
+      - "tensorflow"
+      - "pytorch"
+      - "scikit-learn"
+      - "pandas"
+    devops:
+      - "docker"
+      - "kubernetes"
+      - "terraform"
+      - "ansible"
+
+  # 用途分类
+  purpose:
+    framework: ["framework", "library"]
+    tool: ["tool", "utility", "cli"]
+    learning: ["tutorial", "example", "demo"]
+    research: ["research", "paper", "academic"]

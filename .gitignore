@@ -1,0 +1,312 @@
+# GitHub 星标项目分类整理工具 - Git 忽略文件
+
+# =============================================================================
+# 敏感信息和配置文件
+# =============================================================================
+
+# 环境变量文件（包含API密钥等敏感信息）
+.env
+.env.local
+.env.production
+.env.staging
+.env.development
+
+# 个人配置文件
+config.local.yaml
+config.personal.yaml
+local_config.yaml
+
+# API密钥和令牌文件
+*.key
+*.token
+api_keys.txt
+secrets.json
+
+# =============================================================================
+# Python 相关文件
+# =============================================================================
+
+# 字节码文件
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C扩展
+*.so
+
+# 分发/打包
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+#  通常这些文件是由Python脚本写入的
+#  从模板生成，在运行PyInstaller时
+#  这些文件通常生成在build/目录中
+*.manifest
+*.spec
+
+# 单元测试 / 覆盖率报告
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+#   对于安装了pyenv的库，您可能不想提交的内容
+.python-version
+
+# pipenv
+#   根据官方建议，Pipfile.lock通常应该包含在版本控制中
+#   但是，如果您选择将其排除在外，请取消下面的注释
+#Pipfile.lock
+
+# poetry
+#   与Pipfile.lock类似，通常建议包含poetry.lock在版本控制中
+#   这是特别推荐的，对于在生产中使用的代码库
+#poetry.lock
+
+# pdm
+#   与Pipfile.lock类似，通常建议包含pdm.lock在版本控制中
+#pdm.lock
+#   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
+#   in version control.
+#   https://pdm.fming.dev/#use-with-ide
+.pdm.toml
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
+__pypackages__/
+
+# Celery 任务队列相关
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath 解析文件
+*.sage.py
+
+# 虚拟环境
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# 项目特定虚拟环境
+star_summary_env/
+
+# Spyder 项目设置
+.spyderproject
+.spyproject
+
+# Rope 项目设置
+.ropeproject
+
+# mkdocs 文档
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre 类型检查器
+.pyre/
+
+# pytype 静态类型分析器
+.pytype/
+
+# Cython 调试符号
+cython_debug/
+
+# =============================================================================
+# 操作系统相关文件
+# =============================================================================
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# =============================================================================
+# 编辑器和IDE相关文件
+# =============================================================================
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+# PyCharm
+#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
+#  be added to the global gitignore or merged into this file.  For a more nuclear
+#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
+.idea/
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# =============================================================================
+# 项目特定文件
+# =============================================================================
+
+# 生成的输出文件
+output/
+generated/
+exports/
+results/
+
+# 临时文件和缓存
+temp/
+tmp/
+cache/
+.cache/
+
+# 日志文件
+*.log
+logs/
+log/
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+
+# 备份文件
+*.bak
+*.backup
+backup/
+backups/
+
+# 压缩文件
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# 测试输出文件
+test_output/
+test_results/
+
+# 个人笔记和文档
+notes.md
+todo.md
+scratch/
+
+# =============================================================================
+# GitHub 和 Git 相关
+# =============================================================================
+
+# GitHub Desktop
+.github_token
+
+# GitKraken
+.gk/
+
+# =============================================================================
+# 项目工具相关
+# =============================================================================
+
+# Node.js (如果项目中有前端组件)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Docker
+Dockerfile.local
+docker-compose.override.yml
+
+# =============================================================================
+# 特殊情况（保留的文件）
+# =============================================================================
+
+# 确保这些重要文件不被忽略
+!.gitkeep
+!.gitignore
+!requirements.txt
+!config.yaml
+!.env.example
+
+# 确保文档和模板文件被包含
+!docs/
+!templates/
+!README.md
+!TOOL_README.md
+
+# =============================================================================
+# 用户自定义忽略规则
+# =============================================================================
+
+# 在这里添加您的自定义忽略规则
+# 例如：
+# my_personal_config.yaml
+# local_experiments/

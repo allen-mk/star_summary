@@ -1,0 +1,26 @@
+# GitHub 星标项目分类整理工具 - Python 依赖
+
+# 核心依赖
+PyGithub>=1.59.1        # GitHub API 客户端
+PyYAML>=6.0             # YAML 配置文件解析
+python-dotenv>=1.0.0    # 环境变量管理
+click>=8.1.7            # CLI 框架
+Jinja2>=3.1.2           # 模板引擎
+
+# AI 分类功能（可选）
+openai>=1.3.0           # OpenAI API 客户端
+
+# 工具库
+tqdm>=4.66.0            # 进度条
+colorama>=0.4.6         # 彩色终端输出
+requests>=2.31.0        # HTTP 请求库
+
+# 开发依赖
+pytest>=7.4.0           # 测试框架
+pytest-cov>=4.1.0       # 测试覆盖率
+black>=23.0.0           # 代码格式化
+flake8>=6.0.0           # 代码检查
+mypy>=1.5.0             # 类型检查
+
+# 可选依赖
+httpx>=0.25.0           # 异步 HTTP 客户端（可选替代 requests）
