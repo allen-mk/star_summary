@@ -36,6 +36,10 @@ Research is not currently supported in temporary chats.
 	•	按照：
 	•	技术栈（Python、JavaScript、Rust 等）
 	•	项目用途（Web 开发、数据分析、机器学习、工具类等）
+	•	支持多种分类方式：
+		- 基于规则的传统分类（语言、topics、关键词匹配）
+		- AI大模型智能分类（可选，支持OpenAI GPT模型）
+		- 混合分类模式（规则+AI增强，推荐方式）
 	3.	Markdown 文档生成
 	•	输出目录结构清晰的 Markdown 文件。
 	•	每个项目附带 GitHub 链接、描述、语言、标签等。
@@ -63,7 +67,7 @@ Research is not currently supported in temporary chats.
 模块	任务内容
 GitHub 数据获取	接入 API，拉取用户星标项目，支持分页处理
 数据预处理	提取项目关键词、语言、话题，清洗分类标签
-分类逻辑	基于规则（如语言字段 + topic 标签）实现自动分类
+分类逻辑	基于规则（如语言字段 + topic 标签）实现自动分类，支持AI大模型增强分类
 Markdown 输出	构建目录结构、生成分层文档、嵌入跳转链接
 自动化脚本	命令行脚本 + 定时运行逻辑
 前端原型（阶段二）	使用 React/Vue 渲染分类，实现基本交互与搜索
@@ -76,6 +80,7 @@ Markdown 输出	构建目录结构、生成分层文档、嵌入跳转链接
 	•	requests / httpx（API 请求）
 	•	jinja2（模板生成 Markdown 可选）
 	•	PyYAML / JSON（配置）
+	•	openai（可选，AI分类功能）
 	•	前端界面（可选扩展）：
 	•	React / Vue + TailwindCSS
 	•	部署：
@@ -83,4 +88,30 @@ Markdown 输出	构建目录结构、生成分层文档、嵌入跳转链接
 
 ⸻
 
-如你确认这些内容没问题，我可以进一步为你生成项目初始化脚本模板、README 示例、或脚本开发结构草图。是否需要？
+## 🤖 AI分类功能说明
+
+### 分类模式选择
+- **规则分类** (`rules`) - 基于预定义规则的传统分类方式
+- **AI分类** (`ai`) - 使用OpenAI GPT模型进行智能分类
+- **混合分类** (`hybrid`) - 结合规则和AI的增强分类模式（推荐）
+
+### AI分类特性
+- **智能识别**：基于项目名称、描述、语言、topics等信息进行分析
+- **多维分类**：支持技术栈、用途、编程语言等多个维度的分类
+- **置信度评估**：提供分类结果的置信度评分
+- **错误恢复**：AI分类失败时自动回退到规则分类
+- **成本控制**：可配置仅在规则分类无法准确分类时启用AI
+
+### 配置示例
+```yaml
+classification:
+  method: "hybrid"  # rules, ai, hybrid
+  
+ai_classification:
+  enabled: true
+  api_key_env: "OPENAI_API_KEY"
+  model: "gpt-3.5-turbo"
+  always_use: false
+  fallback_to_rules: true
+```
+

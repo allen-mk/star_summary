@@ -1,0 +1,336 @@
+{
+  "tasks": [
+    {
+      "id": "cd2acc1f-83c3-406d-9683-962a9ae459ac",
+      "name": "项目基础架构搭建和配置管理",
+      "description": "建立项目的基础目录结构，实现配置管理系统，包括GitHub Token认证、环境变量管理和YAML配置文件解析。创建项目的核心架构骨架，为后续模块开发奠定基础。",
+      "notes": "这是整个项目的基础，必须确保配置管理的安全性和灵活性。GitHub Token应该通过环境变量管理，避免硬编码。",
+      "status": "pending",
+      "dependencies": [],
+      "createdAt": "2025-06-18T09:01:14.800Z",
+      "updatedAt": "2025-06-18T09:01:14.800Z",
+      "relatedFiles": [
+        {
+          "path": "src/config/settings.py",
+          "type": "CREATE",
+          "description": "配置管理主模块",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "src/config/auth.py",
+          "type": "CREATE",
+          "description": "GitHub认证管理",
+          "lineStart": 1,
+          "lineEnd": 30
+        },
+        {
+          "path": "config.yaml",
+          "type": "CREATE",
+          "description": "项目配置文件模板",
+          "lineStart": 1,
+          "lineEnd": 40
+        },
+        {
+          "path": "requirements.txt",
+          "type": "CREATE",
+          "description": "Python依赖文件",
+          "lineStart": 1,
+          "lineEnd": 10
+        },
+        {
+          "path": ".env.example",
+          "type": "CREATE",
+          "description": "环境变量模板",
+          "lineStart": 1,
+          "lineEnd": 5
+        }
+      ],
+      "implementationGuide": "1. 创建标准项目结构：\\n```\\nsrc/\\n├── config/\\n│   ├── __init__.py\\n│   ├── settings.py    # 环境变量和配置加载\\n│   └── auth.py        # GitHub Token认证管理\\n├── github/\\n├── classifier/\\n├── generator/\\n├── cli/\\n└── utils/\\n```\\n\\n2. 实现配置管理模块：\\n```python\\n# settings.py\\nclass Config:\\n    def __init__(self, config_file='config.yaml'):\\n        self.load_config(config_file)\\n        self.load_env_vars()\\n    \\n    def load_config(self, file_path):\\n        with open(file_path, 'r') as f:\\n            self.config = yaml.safe_load(f)\\n```\\n\\n3. GitHub认证模块：\\n```python\\n# auth.py\\nfrom github import Github\\nfrom config.settings import Config\\n\\nclass GitHubAuth:\\n    def __init__(self, config: Config):\\n        self.token = os.getenv(config.github.token_env)\\n        self.client = Github(self.token)\\n```\\n\\n4. 创建requirements.txt和setup.py\\n5. 编写.env.example模板文件\\n6. 创建config.yaml配置模板",
+      "verificationCriteria": "1. 项目目录结构完整且符合Python包规范\\n2. 配置模块能正确加载YAML文件和环境变量\\n3. GitHub认证模块能成功连接GitHub API\\n4. 运行测试脚本验证配置加载功能\\n5. 所有必要的依赖都在requirements.txt中定义",
+      "analysisResult": "基于完整的技术架构分析，该项目采用两阶段实现：第一阶段专注核心功能（GitHub API集成、智能分类、Markdown生成、CLI工具），第二阶段扩展前端展示界面。整体设计模块化、可扩展，具备完善的错误处理和自动化部署能力。"
+    },
+    {
+      "id": "cdb5b0eb-c92d-45aa-b4e8-c276dabb142b",
+      "name": "GitHub API集成和星标项目获取",
+      "description": "使用PyGithub库实现GitHub API客户端，包括用户星标项目的获取、分页处理、API限制处理和本地缓存机制。确保能够稳定、高效地从GitHub获取大量星标项目数据。",
+      "notes": "需要处理GitHub API的速率限制，建议实现本地缓存避免重复请求。获取过程中应显示进度条提升用户体验。",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "cd2acc1f-83c3-406d-9683-962a9ae459ac"
+        }
+      ],
+      "createdAt": "2025-06-18T09:01:14.800Z",
+      "updatedAt": "2025-06-18T09:01:14.800Z",
+      "relatedFiles": [
+        {
+          "path": "src/github/__init__.py",
+          "type": "CREATE",
+          "description": "GitHub模块初始化",
+          "lineStart": 1,
+          "lineEnd": 5
+        },
+        {
+          "path": "src/github/client.py",
+          "type": "CREATE",
+          "description": "PyGithub客户端封装",
+          "lineStart": 1,
+          "lineEnd": 80
+        },
+        {
+          "path": "src/github/fetcher.py",
+          "type": "CREATE",
+          "description": "星标项目获取器",
+          "lineStart": 1,
+          "lineEnd": 120
+        },
+        {
+          "path": "src/utils/cache.py",
+          "type": "CREATE",
+          "description": "缓存管理工具",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "src/config/settings.py",
+          "type": "TO_MODIFY",
+          "description": "添加GitHub API相关配置",
+          "lineStart": 20,
+          "lineEnd": 30
+        }
+      ],
+      "implementationGuide": "1. GitHub客户端封装：\\n```python\\n# github/client.py\\nclass GitHubClient:\\n    def __init__(self, auth: GitHubAuth):\\n        self.client = auth.client\\n        self.rate_limiter = RateLimitHandler()\\n    \\n    @handle_rate_limit\\n    def get_user_starred(self):\\n        user = self.client.get_user()\\n        return user.get_starred()\\n```\\n\\n2. 分页获取和进度显示：\\n```python\\n# github/fetcher.py\\nclass StarredFetcher:\\n    def fetch_all_starred(self, show_progress=True):\\n        starred = self.client.get_user_starred()\\n        repos = []\\n        \\n        if show_progress:\\n            from tqdm import tqdm\\n            starred = tqdm(starred, desc='Fetching starred repos')\\n        \\n        for repo in starred:\\n            repos.append(self.extract_repo_data(repo))\\n        \\n        return repos\\n```\\n\\n3. API限制处理：\\n```python\\ndef handle_rate_limit(func):\\n    def wrapper(*args, **kwargs):\\n        try:\\n            return func(*args, **kwargs)\\n        except RateLimitExceededException as e:\\n            wait_time = calculate_wait_time(e)\\n            time.sleep(wait_time)\\n            return func(*args, **kwargs)\\n    return wrapper\\n```\\n\\n4. 本地缓存实现：\\n```python\\nclass RepoCache:\\n    def save_repos(self, repos, cache_file):\\n        with open(cache_file, 'w') as f:\\n            json.dump(repos, f, default=str)\\n    \\n    def load_repos(self, cache_file):\\n        if os.path.exists(cache_file):\\n            with open(cache_file, 'r') as f:\\n                return json.load(f)\\n        return None\\n```",
+      "verificationCriteria": "1. 能够成功连接GitHub API并获取用户星标项目\\n2. 正确处理分页，获取所有星标项目\\n3. 实现API速率限制处理，避免请求失败\\n4. 缓存机制正常工作，避免重复请求\\n5. 获取过程有进度显示，用户体验良好\\n6. 提取的项目数据包含所有必要字段（名称、描述、语言、topics等）",
+      "analysisResult": "基于完整的技术架构分析，该项目采用两阶段实现：第一阶段专注核心功能（GitHub API集成、智能分类、Markdown生成、CLI工具），第二阶段扩展前端展示界面。整体设计模块化、可扩展，具备完善的错误处理和自动化部署能力。"
+    },
+    {
+      "id": "5799f194-0cc7-496d-a4bf-dcb76bb55960",
+      "name": "智能项目分类系统",
+      "description": "设计并实现基于多维度的项目分类算法，包括基于编程语言、项目topics、描述关键词的智能分类。创建可配置的分类规则引擎，支持自定义分类体系和规则扩展。同时支持AI大模型分类作为可选的智能分类方式，提供更准确和灵活的分类能力。",
+      "notes": "分类算法应该支持多维度分类，一个项目可以属于多个分类。需要设计灵活的规则引擎，便于后续扩展和自定义分类规则。新增AI大模型分类功能，支持OpenAI GPT模型，提供更智能和准确的分类能力。支持三种分类模式：纯规则分类、纯AI分类、混合分类（AI增强规则分类）。",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "cdb5b0eb-c92d-45aa-b4e8-c276dabb142b"
+        }
+      ],
+      "createdAt": "2025-06-18T09:01:14.800Z",
+      "updatedAt": "2025-06-18T09:05:17.990Z",
+      "relatedFiles": [
+        {
+          "path": "src/classifier/__init__.py",
+          "type": "CREATE",
+          "description": "分类器模块初始化"
+        },
+        {
+          "path": "src/classifier/rules.py",
+          "type": "CREATE",
+          "description": "分类规则引擎"
+        },
+        {
+          "path": "src/classifier/categories.py",
+          "type": "CREATE",
+          "description": "预定义分类体系"
+        },
+        {
+          "path": "src/classifier/ai_classifier.py",
+          "type": "CREATE",
+          "description": "AI大模型分类器"
+        },
+        {
+          "path": "src/classifier/hybrid_classifier.py",
+          "type": "CREATE",
+          "description": "混合分类器（规则+AI）"
+        },
+        {
+          "path": "src/classifier/classifier.py",
+          "type": "CREATE",
+          "description": "智能分类器主类"
+        },
+        {
+          "path": "config.yaml",
+          "type": "TO_MODIFY",
+          "description": "添加分类配置和AI配置"
+        },
+        {
+          "path": "requirements.txt",
+          "type": "TO_MODIFY",
+          "description": "添加openai依赖"
+        }
+      ],
+      "implementationGuide": "1. 分类规则引擎（保持原有设计）：\n```python\n# classifier/rules.py\nclass ClassificationRule:\n    def __init__(self, name, condition, category):\n        self.name = name\n        self.condition = condition  # 函数或lambda\n        self.category = category\n    \n    def matches(self, repo_data):\n        return self.condition(repo_data)\n\nclass RuleEngine:\n    def __init__(self):\n        self.rules = []\n    \n    def add_rule(self, rule):\n        self.rules.append(rule)\n    \n    def classify(self, repo_data):\n        categories = []\n        for rule in self.rules:\n            if rule.matches(repo_data):\n                categories.append(rule.category)\n        return categories or ['uncategorized']\n```\n\n2. AI大模型分类器（新增）：\n```python\n# classifier/ai_classifier.py\nimport openai\nimport json\nfrom typing import List, Dict, Optional\n\nclass AIClassifier:\n    def __init__(self, api_key: str, model: str = \"gpt-3.5-turbo\"):\n        self.client = openai.OpenAI(api_key=api_key)\n        self.model = model\n        self.system_prompt = self._load_system_prompt()\n    \n    def _load_system_prompt(self) -> str:\n        return '''你是一个专业的GitHub项目分类专家。请根据提供的项目信息，将项目分类到以下类别中：\n\n技术栈分类：\n- web-frontend, web-backend, mobile, desktop, game-dev, ai-ml, data-science, devops, cloud, blockchain, iot, security, testing, documentation\n\n用途分类：\n- framework, library, tool, application, learning, template, example, research, automation, monitoring, deployment\n\n编程语言分类：\n- lang-python, lang-javascript, lang-typescript, lang-java, lang-go, lang-rust, lang-cpp, lang-csharp, lang-php, lang-ruby, lang-swift, lang-kotlin, lang-other\n\n请返回JSON格式，包含所有适用的分类：\n{\"categories\": [\"category1\", \"category2\", ...], \"confidence\": 0.95, \"reasoning\": \"分类原因\"}'''\n\n    def classify_repo(self, repo_data: Dict) -> Dict:\n        \"\"\"使用AI模型分类单个项目\"\"\"\n        prompt = self._build_classification_prompt(repo_data)\n        \n        try:\n            response = self.client.chat.completions.create(\n                model=self.model,\n                messages=[\n                    {\"role\": \"system\", \"content\": self.system_prompt},\n                    {\"role\": \"user\", \"content\": prompt}\n                ],\n                temperature=0.3,\n                max_tokens=500\n            )\n            \n            result = json.loads(response.choices[0].message.content)\n            return {\n                \"categories\": result.get(\"categories\", [\"uncategorized\"]),\n                \"confidence\": result.get(\"confidence\", 0.0),\n                \"reasoning\": result.get(\"reasoning\", \"\"),\n                \"method\": \"ai\"\n            }\n        except Exception as e:\n            print(f\"AI分类失败: {e}\")\n            return {\n                \"categories\": [\"uncategorized\"],\n                \"confidence\": 0.0,\n                \"reasoning\": f\"AI分类出错: {str(e)}\",\n                \"method\": \"fallback\"\n            }\n    \n    def _build_classification_prompt(self, repo_data: Dict) -> str:\n        return f\"\"\"请分类以下GitHub项目：\n\n项目名称: {repo_data.get('name', 'Unknown')}\n完整名称: {repo_data.get('full_name', 'Unknown')}\n编程语言: {repo_data.get('language', 'Unknown')}\n描述: {repo_data.get('description', '无描述')}\nTopics: {', '.join(repo_data.get('topics', []))}\n星标数: {repo_data.get('stargazers_count', 0)}\nFork数: {repo_data.get('forks_count', 0)}\n\n请根据以上信息进行分类。\"\"\"\n\n    def batch_classify(self, repos: List[Dict], batch_size: int = 5) -> List[Dict]:\n        \"\"\"批量分类项目\"\"\"\n        results = []\n        for i in range(0, len(repos), batch_size):\n            batch = repos[i:i + batch_size]\n            for repo in batch:\n                result = self.classify_repo(repo)\n                results.append(result)\n        return results\n```\n\n3. 混合分类器（规则+AI）：\n```python\n# classifier/hybrid_classifier.py\nclass HybridClassifier:\n    def __init__(self, config):\n        self.rule_engine = RuleEngine()\n        self.category_manager = CategoryManager()\n        self.ai_classifier = None\n        self.config = config\n        \n        # 初始化AI分类器（如果配置了）\n        if config.get('ai_classification', {}).get('enabled', False):\n            api_key = config['ai_classification'].get('api_key')\n            model = config['ai_classification'].get('model', 'gpt-3.5-turbo')\n            if api_key:\n                self.ai_classifier = AIClassifier(api_key, model)\n        \n        self.setup_default_rules()\n    \n    def classify_repo(self, repo_data: Dict) -> Dict:\n        # 规则分类结果\n        rule_categories = self.rule_engine.classify(repo_data)\n        \n        result = {\n            \"categories\": rule_categories,\n            \"method\": \"rules\",\n            \"confidence\": 0.8,\n            \"reasoning\": \"基于预定义规则分类\"\n        }\n        \n        # 如果启用AI分类且规则分类不够准确\n        if (self.ai_classifier and \n            (len(rule_categories) == 1 and rule_categories[0] == 'uncategorized' or\n             self.config.get('ai_classification', {}).get('always_use', False))):\n            \n            ai_result = self.ai_classifier.classify_repo(repo_data)\n            \n            # 合并分类结果\n            if ai_result['confidence'] > 0.7:\n                combined_categories = list(set(rule_categories + ai_result['categories']))\n                if 'uncategorized' in combined_categories and len(combined_categories) > 1:\n                    combined_categories.remove('uncategorized')\n                \n                result.update({\n                    \"categories\": combined_categories,\n                    \"method\": \"hybrid\",\n                    \"ai_confidence\": ai_result['confidence'],\n                    \"ai_reasoning\": ai_result['reasoning'],\n                    \"reasoning\": f\"规则分类: {rule_categories}, AI增强: {ai_result['categories']}\"\n                })\n        \n        return result\n```\n\n4. 更新主分类器：\n```python\n# classifier/classifier.py\nclass ProjectClassifier:\n    def __init__(self, config):\n        self.config = config\n        classification_method = config.get('classification', {}).get('method', 'rules')\n        \n        if classification_method == 'ai':\n            self.classifier = AIClassifier(\n                config['ai_classification']['api_key'],\n                config['ai_classification'].get('model', 'gpt-3.5-turbo')\n            )\n        elif classification_method == 'hybrid':\n            self.classifier = HybridClassifier(config)\n        else:  # 默认使用规则分类\n            self.classifier = RuleBasedClassifier(config)\n    \n    def classify_repo(self, repo_data: Dict) -> Dict:\n        return self.classifier.classify_repo(repo_data)\n    \n    def classify_batch(self, repos: List[Dict]) -> List[Dict]:\n        \"\"\"批量分类，支持进度显示\"\"\"\n        results = []\n        from tqdm import tqdm\n        \n        for repo in tqdm(repos, desc=\"分类项目\"):\n            result = self.classify_repo(repo)\n            results.append(result)\n        \n        return results\n```\n\n5. 配置文件扩展：\n```yaml\n# config.yaml 新增AI分类配置\nclassification:\n  method: \"hybrid\"  # rules, ai, hybrid\n  \nai_classification:\n  enabled: true\n  api_key_env: \"OPENAI_API_KEY\"  # 环境变量名\n  model: \"gpt-3.5-turbo\"  # 可选: gpt-4, gpt-3.5-turbo\n  always_use: false  # 是否总是使用AI分类\n  fallback_to_rules: true  # AI失败时回退到规则分类\n  batch_size: 5  # 批处理大小\n  max_retries: 3  # 最大重试次数\n```",
+      "verificationCriteria": "1. 分类算法能正确识别项目的编程语言\n2. 基于topics的分类准确有效\n3. 描述关键词匹配功能正常工作\n4. 支持一个项目属于多个分类\n5. 分类规则引擎易于扩展和配置\n6. 未能分类的项目归入'uncategorized'类别\n7. 分类结果符合预期的分类体系\n8. AI分类功能正常工作，能调用OpenAI API\n9. 混合分类模式能合理合并规则和AI分类结果\n10. AI分类失败时能优雅回退到规则分类\n11. 支持批量分类并显示进度\n12. AI分类的置信度和推理过程记录完整",
+      "analysisResult": "基于完整的技术架构分析，该项目采用两阶段实现：第一阶段专注核心功能（GitHub API集成、智能分类、Markdown生成、CLI工具），第二阶段扩展前端展示界面。整体设计模块化、可扩展，具备完善的错误处理和自动化部署能力。"
+    },
+    {
+      "id": "0134726e-443d-4d5b-9a90-2c9136e96e4f",
+      "name": "Markdown文档生成器",
+      "description": "基于Jinja2模板引擎实现Markdown文档生成系统，支持分类目录结构、项目详情展示、跳转链接和自定义模板。生成结构清晰、美观的Markdown文档，便于阅读和导航。",
+      "notes": "模板设计要美观且易于阅读，支持GitHub Markdown语法。需要考虑大量项目的情况下的文档结构和导航。",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "5799f194-0cc7-496d-a4bf-dcb76bb55960"
+        }
+      ],
+      "createdAt": "2025-06-18T09:01:14.800Z",
+      "updatedAt": "2025-06-18T09:01:14.800Z",
+      "relatedFiles": [
+        {
+          "path": "src/generator/__init__.py",
+          "type": "CREATE",
+          "description": "生成器模块初始化",
+          "lineStart": 1,
+          "lineEnd": 5
+        },
+        {
+          "path": "src/generator/template.py",
+          "type": "CREATE",
+          "description": "Jinja2模板管理器",
+          "lineStart": 1,
+          "lineEnd": 60
+        },
+        {
+          "path": "src/generator/builder.py",
+          "type": "CREATE",
+          "description": "Markdown文档构建器",
+          "lineStart": 1,
+          "lineEnd": 120
+        },
+        {
+          "path": "templates/main.md",
+          "type": "CREATE",
+          "description": "主Markdown模板",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "templates/category.md",
+          "type": "CREATE",
+          "description": "分类页面模板",
+          "lineStart": 1,
+          "lineEnd": 30
+        }
+      ],
+      "implementationGuide": "1. Jinja2模板系统：\\n```python\\n# generator/template.py\\nfrom jinja2 import Environment, FileSystemLoader\\n\\nclass TemplateManager:\\n    def __init__(self, template_dir='templates'):\\n        self.env = Environment(loader=FileSystemLoader(template_dir))\\n        self.setup_filters()\\n    \\n    def setup_filters(self):\\n        self.env.filters['format_date'] = lambda d: d.strftime('%Y-%m-%d')\\n        self.env.filters['truncate_desc'] = lambda s, l=100: s[:l] + '...' if len(s) > l else s\\n    \\n    def render_template(self, template_name, **context):\\n        template = self.env.get_template(template_name)\\n        return template.render(**context)\\n```\\n\\n2. 文档构建器：\\n```python\\n# generator/builder.py\\nclass MarkdownBuilder:\\n    def __init__(self, template_manager, config):\\n        self.template_manager = template_manager\\n        self.config = config\\n    \\n    def build_document(self, classified_repos):\\n        # 组织数据结构\\n        organized_data = self.organize_by_categories(classified_repos)\\n        \\n        # 生成目录\\n        toc = self.generate_toc(organized_data)\\n        \\n        # 渲染主文档\\n        content = self.template_manager.render_template(\\n            'main.md',\\n            toc=toc,\\n            categories=organized_data,\\n            metadata=self.generate_metadata(classified_repos)\\n        )\\n        \\n        return content\\n    \\n    def organize_by_categories(self, repos):\\n        categories = {}\\n        for repo in repos:\\n            for category in repo.categories:\\n                if category not in categories:\\n                    categories[category] = []\\n                categories[category].append(repo)\\n        return categories\\n```\\n\\n3. Markdown模板设计：\\n```markdown\\n# templates/main.md\\n# 🌟 我的GitHub星标项目\\n\\n> 生成时间: {{ metadata.generated_at }}\\n> 项目总数: {{ metadata.total_count }}\\n\\n## 📋 目录\\n\\n{{ toc }}\\n\\n{% for category_name, repos in categories.items() %}\\n## {{ category_name | title }}\\n\\n{% for repo in repos %}\\n### [{{ repo.name }}]({{ repo.html_url }})\\n\\n**⭐ {{ repo.stargazers_count }}** | **语言: {{ repo.language or 'Unknown' }}**\\n\\n{{ repo.description or '暂无描述' }}\\n\\n{% if repo.topics %}\\n**标签:** {% for topic in repo.topics %}`{{ topic }}`{% if not loop.last %} {% endif %}{% endfor %}\\n{% endif %}\\n\\n**更新时间:** {{ repo.updated_at | format_date }}\\n\\n---\\n\\n{% endfor %}\\n{% endfor %}\\n```\\n\\n4. 多格式输出支持：\\n```python\\nclass DocumentExporter:\\n    def export_markdown(self, content, output_path):\\n        with open(output_path, 'w', encoding='utf-8') as f:\\n            f.write(content)\\n    \\n    def export_json(self, data, output_path):\\n        with open(output_path, 'w', encoding='utf-8') as f:\\n            json.dump(data, f, indent=2, ensure_ascii=False, default=str)\\n```",
+      "verificationCriteria": "1. 生成的Markdown文档格式正确且美观\\n2. 目录结构清晰，支持锚点跳转\\n3. 项目信息完整展示（名称、描述、语言、星数、链接等）\\n4. 分类组织合理，便于浏览\\n5. 模板系统灵活，支持自定义\\n6. 支持多种输出格式（Markdown、JSON）\\n7. 文档生成速度满足性能要求",
+      "analysisResult": "基于完整的技术架构分析，该项目采用两阶段实现：第一阶段专注核心功能（GitHub API集成、智能分类、Markdown生成、CLI工具），第二阶段扩展前端展示界面。整体设计模块化、可扩展，具备完善的错误处理和自动化部署能力。"
+    },
+    {
+      "id": "66fca69a-1cb2-4b55-b242-903aa2550d7c",
+      "name": "CLI命令行工具开发",
+      "description": "基于Click框架开发功能完整的命令行接口，支持参数配置、进度显示、错误处理和详细日志。实现用户友好的交互体验，支持手动执行和自动化脚本集成。",
+      "notes": "CLI设计要用户友好，提供清晰的帮助信息和错误提示。支持进度显示和详细的日志输出，便于调试和监控。",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "0134726e-443d-4d5b-9a90-2c9136e96e4f"
+        }
+      ],
+      "createdAt": "2025-06-18T09:01:14.800Z",
+      "updatedAt": "2025-06-18T09:01:14.800Z",
+      "relatedFiles": [
+        {
+          "path": "src/cli/__init__.py",
+          "type": "CREATE",
+          "description": "CLI模块初始化",
+          "lineStart": 1,
+          "lineEnd": 5
+        },
+        {
+          "path": "src/cli/main.py",
+          "type": "CREATE",
+          "description": "主CLI入口文件",
+          "lineStart": 1,
+          "lineEnd": 200
+        },
+        {
+          "path": "src/cli/commands.py",
+          "type": "CREATE",
+          "description": "CLI子命令定义",
+          "lineStart": 1,
+          "lineEnd": 100
+        },
+        {
+          "path": "src/utils/logging.py",
+          "type": "CREATE",
+          "description": "日志配置工具",
+          "lineStart": 1,
+          "lineEnd": 40
+        },
+        {
+          "path": "setup.py",
+          "type": "CREATE",
+          "description": "Python包安装配置",
+          "lineStart": 1,
+          "lineEnd": 30
+        }
+      ],
+      "implementationGuide": "1. Click CLI框架设计：\\n```python\\n# cli/main.py\\nimport click\\nfrom config.settings import Config\\nfrom github.fetcher import StarredFetcher\\nfrom classifier.classifier import ProjectClassifier\\nfrom generator.builder import MarkdownBuilder\\n\\n@click.group()\\n@click.version_option(version='1.0.0')\\ndef cli():\\n    \\\"\\\"\\\"GitHub 星标项目分类整理工具\\\"\\\"\\\"\\n    pass\\n\\n@cli.command()\\n@click.option('--token', envvar='GITHUB_TOKEN', help='GitHub personal access token')\\n@click.option('--config', default='config.yaml', help='Configuration file path')\\n@click.option('--output', default='output', help='Output directory')\\n@click.option('--format', type=click.Choice(['markdown', 'json', 'both']), default='markdown')\\n@click.option('--no-cache', is_flag=True, help='Disable caching')\\n@click.option('--verbose', '-v', is_flag=True, help='Verbose output')\\n@click.option('--dry-run', is_flag=True, help='Show what would be done without actually doing it')\\ndef generate(token, config, output, format, no_cache, verbose, dry_run):\\n    \\\"\\\"\\\"生成星标项目分类文档\\\"\\\"\\\"\\n    try:\\n        # 设置日志级别\\n        setup_logging(verbose)\\n        \\n        # 加载配置\\n        config_obj = Config(config)\\n        \\n        if dry_run:\\n            click.echo('🔍 预览模式：显示将要执行的操作')\\n            preview_operations(config_obj)\\n            return\\n        \\n        # 执行主要流程\\n        with click.progressbar(length=4, label='处理中') as bar:\\n            # 获取星标项目\\n            fetcher = StarredFetcher(config_obj)\\n            repos = fetcher.fetch_all_starred()\\n            bar.update(1)\\n            \\n            # 项目分类\\n            classifier = ProjectClassifier(config_obj)\\n            classified_repos = [classifier.classify_repo(repo) for repo in repos]\\n            bar.update(1)\\n            \\n            # 生成文档\\n            builder = MarkdownBuilder(config_obj)\\n            content = builder.build_document(classified_repos)\\n            bar.update(1)\\n            \\n            # 输出文件\\n            save_output(content, output, format)\\n            bar.update(1)\\n        \\n        click.echo(f'✅ 成功生成 {len(repos)} 个项目的分类文档')\\n        \\n    except Exception as e:\\n        click.echo(f'❌ 执行失败: {e}', err=True)\\n        if verbose:\\n            import traceback\\n            traceback.print_exc()\\n        raise click.Abort()\\n```\\n\\n2. 子命令设计：\\n```python\\n@cli.command()\\n@click.option('--token', envvar='GITHUB_TOKEN', required=True)\\ndef validate(token):\\n    \\\"\\\"\\\"验证GitHub Token有效性\\\"\\\"\\\"\\n    try:\\n        from github import Github\\n        g = Github(token)\\n        user = g.get_user()\\n        click.echo(f'✅ Token有效，用户: {user.login}')\\n        click.echo(f'📊 API限制: {g.get_rate_limit().core.remaining}/{g.get_rate_limit().core.limit}')\\n    except Exception as e:\\n        click.echo(f'❌ Token无效: {e}', err=True)\\n\\n@cli.command()\\n@click.argument('output_dir', default='output')\\ndef init(output_dir):\\n    \\\"\\\"\\\"初始化项目配置文件\\\"\\\"\\\"\\n    from pathlib import Path\\n    \\n    # 创建输出目录\\n    Path(output_dir).mkdir(exist_ok=True)\\n    \\n    # 复制配置模板\\n    config_template = Path('config.yaml.template')\\n    if config_template.exists():\\n        shutil.copy(config_template, 'config.yaml')\\n        click.echo('✅ 已创建 config.yaml')\\n    \\n    # 创建.env模板\\n    env_content = 'GITHUB_TOKEN=your_token_here\\\\n'\\n    with open('.env', 'w') as f:\\n        f.write(env_content)\\n    click.echo('✅ 已创建 .env 文件模板')\\n```\\n\\n3. 错误处理和日志：\\n```python\\nimport logging\\n\\ndef setup_logging(verbose=False):\\n    level = logging.DEBUG if verbose else logging.INFO\\n    logging.basicConfig(\\n        level=level,\\n        format='%(asctime)s - %(levelname)s - %(message)s',\\n        handlers=[\\n            logging.FileHandler('star_summary.log'),\\n            logging.StreamHandler()\\n        ]\\n    )\\n\\n@click.command()\\n@click.pass_context\\ndef main(ctx):\\n    try:\\n        cli()\\n    except KeyboardInterrupt:\\n        click.echo('\\\\n❌ 用户中断操作')\\n    except Exception as e:\\n        click.echo(f'❌ 未预期的错误: {e}', err=True)\\n        logging.exception('Unexpected error')\\n        ctx.exit(1)\\n```",
+      "verificationCriteria": "1. CLI命令行界面功能完整且易用\\n2. 所有命令都有清晰的帮助文档\\n3. 参数解析和验证正确\\n4. 进度显示和状态反馈良好\\n5. 错误处理完善，错误信息明确\\n6. 日志记录详细，便于调试\\n7. 支持多种输出格式和选项\\n8. 可以通过pip安装为系统命令",
+      "analysisResult": "基于完整的技术架构分析，该项目采用两阶段实现：第一阶段专注核心功能（GitHub API集成、智能分类、Markdown生成、CLI工具），第二阶段扩展前端展示界面。整体设计模块化、可扩展，具备完善的错误处理和自动化部署能力。"
+    },
+    {
+      "id": "0c29984b-30c1-43fe-bad9-48efccf19a2c",
+      "name": "前端数据接口和部署配置",
+      "description": "为前端扩展准备JSON数据接口，实现GitHub Actions自动化部署，创建项目文档和使用说明。完善项目的自动化工作流程，为后续前端开发奠定基础。",
+      "notes": "这个任务为后续前端开发做准备，确保数据接口规范和部署流程完整。GitHub Actions配置要测试无误，确保自动化更新正常工作。",
+      "status": "pending",
+      "dependencies": [
+        {
+          "taskId": "66fca69a-1cb2-4b55-b242-903aa2550d7c"
+        }
+      ],
+      "createdAt": "2025-06-18T09:01:14.800Z",
+      "updatedAt": "2025-06-18T09:01:14.800Z",
+      "relatedFiles": [
+        {
+          "path": "src/generator/api.py",
+          "type": "CREATE",
+          "description": "JSON API数据生成器",
+          "lineStart": 1,
+          "lineEnd": 80
+        },
+        {
+          "path": ".github/workflows/update-stars.yml",
+          "type": "CREATE",
+          "description": "GitHub Actions自动更新工作流",
+          "lineStart": 1,
+          "lineEnd": 50
+        },
+        {
+          "path": "README.md",
+          "type": "CREATE",
+          "description": "项目主文档",
+          "lineStart": 1,
+          "lineEnd": 100
+        },
+        {
+          "path": "docs/usage.md",
+          "type": "CREATE",
+          "description": "详细使用说明",
+          "lineStart": 1,
+          "lineEnd": 80
+        },
+        {
+          "path": "Dockerfile",
+          "type": "CREATE",
+          "description": "Docker容器配置",
+          "lineStart": 1,
+          "lineEnd": 20
+        },
+        {
+          "path": "docker-compose.yml",
+          "type": "CREATE",
+          "description": "Docker Compose配置",
+          "lineStart": 1,
+          "lineEnd": 15
+        }
+      ],
+      "implementationGuide": "1. JSON API接口设计：\\n```python\\n# generator/api.py\\nclass DataAPI:\\n    def __init__(self, classified_repos):\\n        self.repos = classified_repos\\n    \\n    def generate_api_data(self):\\n        return {\\n            'metadata': {\\n                'generated_at': datetime.now().isoformat(),\\n                'version': '1.0.0',\\n                'total_repos': len(self.repos),\\n                'categories': list(self.get_all_categories()),\\n                'languages': list(self.get_all_languages()),\\n                'stats': self.generate_stats()\\n            },\\n            'repositories': [\\n                {\\n                    'id': repo.id,\\n                    'name': repo.name,\\n                    'full_name': repo.full_name,\\n                    'description': repo.description,\\n                    'html_url': repo.html_url,\\n                    'language': repo.language,\\n                    'stargazers_count': repo.stargazers_count,\\n                    'forks_count': repo.forks_count,\\n                    'topics': repo.topics,\\n                    'categories': repo.categories,\\n                    'created_at': repo.created_at.isoformat(),\\n                    'updated_at': repo.updated_at.isoformat(),\\n                    'pushed_at': repo.pushed_at.isoformat() if repo.pushed_at else None\\n                }\\n                for repo in self.repos\\n            ]\\n        }\\n    \\n    def save_api_data(self, output_path):\\n        data = self.generate_api_data()\\n        with open(output_path, 'w', encoding='utf-8') as f:\\n            json.dump(data, f, indent=2, ensure_ascii=False)\\n```\\n\\n2. GitHub Actions工作流：\\n```yaml\\n# .github/workflows/update-stars.yml\\nname: Update Starred Projects\\n\\non:\\n  schedule:\\n    - cron: '0 6 * * *'  # 每天早上6点运行\\n  workflow_dispatch:  # 手动触发\\n  push:\\n    branches: [ main ]\\n\\njobs:\\n  update-stars:\\n    runs-on: ubuntu-latest\\n    \\n    steps:\\n    - name: Checkout repository\\n      uses: actions/checkout@v3\\n      \\n    - name: Setup Python\\n      uses: actions/setup-python@v4\\n      with:\\n        python-version: '3.11'\\n        \\n    - name: Cache dependencies\\n      uses: actions/cache@v3\\n      with:\\n        path: ~/.cache/pip\\n        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}\\n        \\n    - name: Install dependencies\\n      run: |\\n        python -m pip install --upgrade pip\\n        pip install -r requirements.txt\\n        \\n    - name: Run star summary\\n      env:\\n        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\\n      run: |\\n        python -m src.cli.main generate --format both --verbose\\n        \\n    - name: Commit and push changes\\n      run: |\\n        git config --local user.email \\\"action@github.com\\\"\\n        git config --local user.name \\\"GitHub Action\\\"\\n        git add output/\\n        git diff --staged --quiet || git commit -m \\\"Auto-update starred projects [$(date '+%Y-%m-%d %H:%M')]\\\"\\n        git push\\n```\\n\\n3. 项目文档：\\n```markdown\\n# README.md\\n# 🌟 GitHub 星标项目分类整理工具\\n\\n> 自动抓取并分类整理你的 GitHub 星标项目，生成美观的 Markdown 文档\\n\\n## ✨ 特性\\n\\n- 🔄 自动获取 GitHub 星标项目\\n- 🏷️ 智能多维度分类（语言、用途、技术栈）\\n- 📝 生成结构化 Markdown 文档\\n- 🎨 支持自定义模板和分类规则\\n- ⚡ 本地缓存，提高运行效率\\n- 🤖 GitHub Actions 自动更新\\n- 📊 提供 JSON API 数据接口\\n\\n## 🚀 快速开始\\n\\n### 安装\\n\\n```bash\\n# 克隆项目\\ngit clone https://github.com/yourusername/star-summary.git\\ncd star-summary\\n\\n# 安装依赖\\npip install -r requirements.txt\\n\\n# 或者直接安装\\npip install -e .\\n```\\n\\n### 配置\\n\\n1. 获取 GitHub Personal Access Token\\n2. 设置环境变量：\\n\\n```bash\\nexport GITHUB_TOKEN=your_token_here\\n```\\n\\n### 使用\\n\\n```bash\\n# 生成 Markdown 文档\\nstar-summary generate\\n\\n# 生成 JSON 数据\\nstar-summary generate --format json\\n\\n# 验证 Token\\nstar-summary validate\\n```\\n```\\n\\n4. Docker 配置：\\n```dockerfile\\n# Dockerfile\\nFROM python:3.11-slim\\n\\nWORKDIR /app\\n\\nCOPY requirements.txt .\\nRUN pip install --no-cache-dir -r requirements.txt\\n\\nCOPY . .\\n\\nENTRYPOINT [\\\"python\\\", \\\"-m\\\", \\\"src.cli.main\\\"]\\n```",
+      "verificationCriteria": "1. JSON API数据格式规范，包含所有必要字段\\n2. GitHub Actions工作流能正常运行\\n3. 自动化更新功能测试通过\\n4. 项目文档完整清晰，包含安装和使用说明\\n5. Docker配置正确，可以容器化运行\\n6. 为前端开发预留的接口设计合理\\n7. 部署配置支持多种环境（本地、CI/CD、Docker）",
+      "analysisResult": "基于完整的技术架构分析，该项目采用两阶段实现：第一阶段专注核心功能（GitHub API集成、智能分类、Markdown生成、CLI工具），第二阶段扩展前端展示界面。整体设计模块化、可扩展，具备完善的错误处理和自动化部署能力。"
+    }
+  ]
+}
