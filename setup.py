@@ -79,6 +79,7 @@ setup(
     entry_points={
         "console_scripts": [
             "star-summary=cli.main:cli",
+            "star-summary-tools=cli.commands:tools",
         ],
     },
     include_package_data=True,
