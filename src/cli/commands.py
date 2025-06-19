@@ -110,7 +110,11 @@ def classify(token, config, method, repo_name):
         # 加载配置
         config_manager = Config(config)
         config_obj = config_manager.config
-        config_obj['classifier']['default_method'] = method
+        
+        # 确保有分类配置
+        if 'classification' not in config_obj:
+            config_obj['classification'] = {}
+        config_obj['classification']['method'] = method
         
         # 初始化服务
         github_service = GitHubService(config_manager)
@@ -343,18 +347,18 @@ def _display_repos_csv(repos: List[Dict[str, Any]]):
 
 def _display_classification_result(result: Dict[str, Any]):
     """显示单个项目的分类结果"""
-    repo = result['repo']
+    # 新的数据结构：项目信息和分类信息都在同一层级
     classification = result['classification']
     
     click.echo(f"\n📋 项目信息:")
-    click.echo(f"  📛 名称: {repo['name']}")
-    click.echo(f"  🔗 链接: {repo['html_url']}")
-    click.echo(f"  📝 描述: {repo.get('description', '无描述')}")
-    click.echo(f"  💻 语言: {repo.get('language', '未知')}")
-    click.echo(f"  ⭐ 星数: {repo.get('stargazers_count', 0)}")
+    click.echo(f"  📛 名称: {result['name']}")
+    click.echo(f"  🔗 链接: {result['html_url']}")
+    click.echo(f"  📝 描述: {result.get('description', '无描述')}")
+    click.echo(f"  💻 语言: {result.get('language', '未知')}")
+    click.echo(f"  ⭐ 星数: {result.get('stargazers_count', 0)}")
     
-    if repo.get('topics'):
-        click.echo(f"  🏷️ 标签: {', '.join(repo['topics'])}")
+    if result.get('topics'):
+        click.echo(f"  🏷️ 标签: {', '.join(result['topics'])}")
     
     click.echo(f"\n🏷️ 分类结果:")
     click.echo(f"  📂 分类: {', '.join(classification['categories'])}")
@@ -408,9 +412,8 @@ def _display_classification_summary(results: List[Dict[str, Any]]):
     click.echo("-" * 50)
     
     for i, result in enumerate(results[:5]):
-        repo = result['repo']
         classification = result['classification']
-        click.echo(f"{i+1}. {repo['name']}")
+        click.echo(f"{i+1}. {result['name']}")
         click.echo(f"   分类: {', '.join(classification['categories'])}")
         click.echo(f"   置信度: {classification['confidence']:.2f}")
         click.echo()

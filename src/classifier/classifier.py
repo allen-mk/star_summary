@@ -131,29 +131,40 @@ class ProjectClassifier:
             repo_data: 项目数据
             
         Returns:
-            分类结果
+            包含项目数据和分类结果的字典
         """
         try:
+            # 复制原始项目数据
+            result = repo_data.copy()
+            
             if hasattr(self.classifier, 'classify_repo'):
-                return self.classifier.classify_repo(repo_data)
+                classification = self.classifier.classify_repo(repo_data)
             else:
                 # 对于RuleEngine，使用classify方法
                 categories = self.classifier.classify(repo_data)
-                return {
+                classification = {
                     'categories': categories,
                     'method': 'rules',
                     'confidence': 0.8,
                     'reasoning': '基于预定义规则分类'
                 }
+            
+            # 添加分类信息到项目数据
+            result['classification'] = classification
+            return result
+            
         except Exception as e:
             logger.error(f"分类项目 {repo_data.get('name', 'Unknown')} 时出错: {e}")
-            return {
+            # 即使分类失败，也返回原始数据和默认分类
+            result = repo_data.copy()
+            result['classification'] = {
                 'categories': ['uncategorized'],
                 'method': 'error',
                 'confidence': 0.0,
                 'reasoning': f'分类出错: {str(e)}',
                 'error': str(e)
             }
+            return result
     
     def classify_batch(self, repos: List[Dict[str, Any]], 
                       show_progress: bool = True) -> List[Dict[str, Any]]:

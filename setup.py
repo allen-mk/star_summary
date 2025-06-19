@@ -58,7 +58,7 @@ setup(
     description="GitHub 星标项目分类整理工具",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/star-summary",
+    url="https://github.com/AllenHD/star-summary",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     classifiers=[
@@ -88,8 +88,8 @@ setup(
     },
     keywords="github, starred, repositories, classification, markdown",
     project_urls={
-        "Bug Reports": "https://github.com/yourusername/star-summary/issues",
-        "Source": "https://github.com/yourusername/star-summary",
-        "Documentation": "https://github.com/yourusername/star-summary#readme",
+        "Bug Reports": "https://github.com/AllenHD/star-summary/issues",
+        "Source": "https://github.com/AllenHD/star-summary",
+        "Documentation": "https://github.com/AllenHD/star-summary#readme",
     },
 )

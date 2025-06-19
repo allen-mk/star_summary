@@ -50,7 +50,7 @@ fetcher:
 
 # 分类配置
 classification:
-  method: "hybrid"  # 分类方法: rules, ai, hybrid
+  method: "rules"  # 分类方法: rules, ai, hybrid
 
 # AI 分类配置（可选）
 ai_classification:
@@ -59,7 +59,7 @@ ai_classification:
   model: "gpt-3.5-turbo"  # 使用的模型: gpt-3.5-turbo, gpt-4
   always_use: false  # 是否总是使用 AI 分类
   fallback_to_rules: true  # AI 失败时回退到规则分类
-  batch_size: 5  # 批处理大小
+  batch_size: 100  # 批处理大小
   max_retries: 3  # 最大重试次数
 
 # 输出配置

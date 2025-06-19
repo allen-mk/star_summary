@@ -90,9 +90,9 @@ class MarkdownBuilder:
         """
         categories = defaultdict(lambda: {'repos': [], 'total_stars': 0, 'total_forks': 0})
         
-        for item in classified_repos:
-            repo = item.get('repo', {})
-            classification = item.get('classification', {})
+        for repo_data in classified_repos:
+            # 新的数据结构：项目数据和分类信息都在同一层级
+            classification = repo_data.get('classification', {})
             
             # 获取分类信息
             repo_categories = classification.get('categories', ['uncategorized'])
@@ -100,10 +100,10 @@ class MarkdownBuilder:
             # 为每个分类添加仓库
             for category in repo_categories:
                 # 避免重复添加
-                if repo not in categories[category]['repos']:
-                    categories[category]['repos'].append(repo)
-                    categories[category]['total_stars'] += repo.get('stargazers_count', 0)
-                    categories[category]['total_forks'] += repo.get('forks_count', 0)
+                if repo_data not in categories[category]['repos']:
+                    categories[category]['repos'].append(repo_data)
+                    categories[category]['total_stars'] += repo_data.get('stargazers_count', 0)
+                    categories[category]['total_forks'] += repo_data.get('forks_count', 0)
         
         # 按星标数排序每个分类中的仓库
         for category_data in categories.values():
