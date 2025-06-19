@@ -11,7 +11,7 @@
 ### 1. 克隆项目
 
 ```bash
-git clone https://github.com/yourusername/star-summary.git
+git clone https://github.com/AllenHD/star-summary.git
 cd star-summary
 ```
 

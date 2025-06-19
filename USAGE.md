@@ -430,4 +430,4 @@ star-summary generate --config team-config.yaml --output docs/
 - 项目配置：[config.yaml](config.yaml)
 - 模板文件：[templates/](templates/)
 - 示例输出：[output/README.md](output/README.md)
-- 问题反馈：[GitHub Issues](https://github.com/yourusername/star-summary/issues)
+- 问题反馈：[GitHub Issues](https://github.com/AllenHD/star-summary/issues)

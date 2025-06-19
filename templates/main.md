@@ -60,4 +60,4 @@
 
 ---
 
-*📝 本文档由 [GitHub Star Summary](https://github.com/yourusername/star-summary) 自动生成*
+*📝 本文档由 [GitHub Star Summary](https://github.com/AllenHD/star-summary) 自动生成*

@@ -230,7 +230,7 @@ rm -rf venv
 
 - [GitHub API 文档](https://docs.github.com/en/rest)
 - [OpenAI API 文档](https://platform.openai.com/docs/api-reference)
-- [项目 GitHub 仓库](https://github.com/yourusername/star-summary)
+- [项目 GitHub 仓库](https://github.com/AllenHD/star-summary)
 
 ## 🤝 贡献
 
