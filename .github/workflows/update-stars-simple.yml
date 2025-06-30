@@ -1,0 +1,62 @@
+name: Update Starred Projects (Simple)
+
+on:
+  workflow_dispatch:  # 仅手动触发，用于测试
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/workflows/update-stars-simple.yml'
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+        cache-dependency-path: 'requirements.txt'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -e .
+        
+    - name: Test CLI installation
+      run: |
+        echo "Testing CLI installation..."
+        star-summary --help
+        echo "CLI installation successful"
+        
+    - name: Test with minimal generation
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "Testing star summary generation..."
+        mkdir -p test-output
+        
+        # 尝试生成少量项目的文档来测试
+        star-summary generate --format both --output test-output --max-repos 5 --verbose || {
+          echo "Generation failed, checking status..."
+          star-summary status
+          exit 1
+        }
+        
+        echo "Generated files:"
+        ls -la test-output/
+        
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-output
+        path: test-output/
+        retention-days: 1

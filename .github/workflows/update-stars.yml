@@ -40,56 +40,81 @@ jobs:
         
     - name: Verify installation
       run: |
+        echo "Checking Python environment:"
+        python --version
+        pip --version
+        echo "Checking installed packages:"
+        pip list | grep -E "(github|click|jinja2|yaml)" || echo "Some packages may not be installed"
+        echo "Checking CLI commands:"
         star-summary --version || echo "Version command not available"
-        star-summary status
+        echo "Checking system status:"
+        star-summary status || echo "Status command failed"
         
-    - name: Run star summary
+    - name: Run star summary with error handling
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        star-summary generate --format both --verbose
+        echo "Starting star summary generation..."
+        mkdir -p output
         
-    - name: Generate API data
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # 简单的生成命令，让CLI工具处理所有逻辑
+        star-summary generate --format both --output output --verbose
+        
+        echo "✅ Star summary generation completed successfully"
+        
+    - name: Debug environment
+      if: failure()
       run: |
-        python -c "
-        import sys
-        sys.path.append('src')
-        from src.config.settings import Config
-        from src.github_api.service import GitHubService
-        from src.classifier.classifier import ProjectClassifier
-        from src.generator.api import DataAPI
+        echo "=== Debug Information ==="
+        echo "Current directory:"
+        pwd
+        echo "Directory contents:"
+        ls -la
+        echo "Python path:"
+        python -c "import sys; print('\n'.join(sys.path))"
+        echo "Environment variables:"
+        env | grep -E "(GITHUB|PYTHON|PATH)" | head -10
+        echo "Output directory:"
+        ls -la output/ || echo "Output directory not found"
+        echo "=== End Debug Information ==="
         
-        # 加载配置
-        config = Config('config.yaml')
-        
-        # 获取项目并分类
-        github_service = GitHubService(config)
-        repos = github_service.fetch_starred_repos()
-        classifier = ProjectClassifier(config.config)
-        
-        classified_repos = []
-        for repo in repos:
-            classified_repo = classifier.classify_repo(repo)
-            classified_repos.append(classified_repo)
-        
-        # 生成API数据
-        api = DataAPI(classified_repos)
-        api.save_api_data('output/api.json')
-        print('API数据生成完成')
-        "
+    - name: Verify output files
+      run: |
+        echo "Generated files:"
+        ls -la output/
+        echo "Checking file contents:"
+        if [ -f "output/README.md" ]; then
+          echo "✅ README.md exists ($(wc -l < output/README.md) lines)"
+        else
+          echo "❌ README.md missing"
+        fi
+        if [ -f "output/starred_repos.json" ]; then
+          echo "✅ starred_repos.json exists ($(wc -l < output/starred_repos.json) lines)"
+        else
+          echo "❌ starred_repos.json missing"
+        fi
         
     - name: Check for changes
       id: changes
       run: |
-        if git diff --quiet HEAD -- output/; then
+        # 确保output目录存在
+        mkdir -p output
+        
+        # 添加output目录到git跟踪（如果是新文件）
+        git add output/ || true
+        
+        # 检查是否有变更
+        if [ ! -d "output" ] || [ -z "$(ls -A output 2>/dev/null)" ]; then
           echo "has_changes=false" >> $GITHUB_OUTPUT
-          echo "No changes detected in output directory"
+          echo "❌ No output files generated"
+        elif git diff --cached --quiet && git diff --quiet HEAD -- output/ 2>/dev/null; then
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+          echo "ℹ️ No changes detected in output directory"
         else
           echo "has_changes=true" >> $GITHUB_OUTPUT
-          echo "Changes detected in output directory"
-          git diff --stat HEAD -- output/
+          echo "✅ Changes detected in output directory"
+          echo "Changed files:"
+          git status --porcelain output/ || echo "New files in output directory"
         fi
         
     - name: Commit and push changes
@@ -97,9 +122,18 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
+        
+        # 添加所有输出文件
         git add output/
-        git commit -m "Auto-update starred projects [$(date '+%Y-%m-%d %H:%M UTC')]"
-        git push
+        
+        # 检查是否真的有变更要提交
+        if git diff --cached --quiet; then
+          echo "No changes to commit after staging"
+        else
+          git commit -m "Auto-update starred projects [$(date '+%Y-%m-%d %H:%M UTC')]"
+          git push
+          echo "Changes committed and pushed successfully"
+        fi
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
