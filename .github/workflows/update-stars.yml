@@ -57,8 +57,8 @@ jobs:
         echo "Starting star summary generation..."
         mkdir -p output
         
-        # 简单的生成命令，让CLI工具处理所有逻辑
-        star-summary generate --format both --output output --verbose
+        # 使用主CLI的verbose选项和generate子命令
+        star-summary --verbose generate --format both --output output
         
         echo "✅ Star summary generation completed successfully"
         

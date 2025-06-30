@@ -167,7 +167,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         mkdir -p output
-        star-summary generate --format both --output output --verbose
+        star-summary --verbose generate --format both --output output
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -515,6 +515,7 @@ print(f"最受欢迎的语言: {df['language'].value_counts().head()}")
 - ✅ 为前端开发奠定完善的基础设施和数据接口
 - ✅ 修复GitHub Actions版本兼容性问题，确保长期稳定运行
 - ✅ 优化工作流错误处理和调试能力，提供测试版本验证功能
+- ✅ 修复CLI命令选项问题，确保正确的`--verbose`选项位置
 
 该任务的完成标志着GitHub星标项目分类整理工具的**所有6个核心任务全部完成**，项目已达到生产就绪状态。用户现在可以通过多种方式（命令行、Docker、GitHub Actions）使用该工具，前端开发者可以直接使用标准化的JSON API构建现代化的Web界面。整个系统具备了完整的自动化工作流程，可以无人值守地维护和更新GitHub星标项目的分类整理。
 

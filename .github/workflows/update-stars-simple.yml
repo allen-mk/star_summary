@@ -45,7 +45,7 @@ jobs:
         mkdir -p test-output
         
         # 尝试生成少量项目的文档来测试
-        star-summary generate --format both --output test-output --max-repos 5 --verbose || {
+        star-summary --verbose generate --format both --output test-output --max-repos 5 || {
           echo "Generation failed, checking status..."
           star-summary status
           exit 1
