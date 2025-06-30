@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  star-summary:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: star-summary
+    environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - PYTHONPATH=/app
+    volumes:
+      - ./output:/app/output
+      - ./data:/app/data
+      - ./config.yaml:/app/config.yaml:ro
+    restart: unless-stopped
+    command: star-summary generate --format both
+    
+  # 开发环境
+  star-summary-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: star-summary-dev
+    environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - PYTHONPATH=/app
+    volumes:
+      - .:/app
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+    profiles:
+      - dev
+
+  # 定时任务服务
+  star-summary-cron:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: star-summary-cron
+    environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - PYTHONPATH=/app
+    volumes:
+      - ./output:/app/output
+      - ./data:/app/data
+      - ./config.yaml:/app/config.yaml:ro
+      - ./crontab:/etc/crontabs/app:ro
+    restart: unless-stopped
+    command: crond -f
+    profiles:
+      - cron
+
+  # Web 服务（用于展示生成的文档）
+  web:
+    image: nginx:alpine
+    container_name: star-summary-web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./output:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    restart: unless-stopped
+    depends_on:
+      - star-summary
+    profiles:
+      - web
+
+networks:
+  default:
+    name: star-summary-network

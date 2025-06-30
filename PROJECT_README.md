@@ -11,12 +11,12 @@
 
 - 🔄 **自动获取** - 自动抓取 GitHub 星标项目
 - 🏷️ **智能分类** - 多维度分类（语言、用途、技术栈）
-- � **文档生成** - 生成结构化 Markdown 文档
+- 📝 **文档生成** - 生成结构化 Markdown 文档
 - 🎨 **自定义模板** - 支持自定义模板和分类规则
 - ⚡ **本地缓存** - 提高运行效率，避免重复请求
 - 🤖 **自动更新** - GitHub Actions 自动更新
 - 📊 **JSON API** - 提供标准化的 JSON 数据接口
-- � **CLI工具** - 完整的命令行界面
+- 🎯 **CLI工具** - 完整的命令行界面
 - 🐳 **Docker支持** - 容器化部署
 
 ## 🚀 快速开始
@@ -152,73 +152,107 @@ cache:
 - 🎮 游戏开发
 - 🔧 开发工具
 
-```env
-GITHUB_TOKEN=your_github_token_here
-```
+### 自定义分类
 
-### 4. 运行
-
-```bash
-# 激活虚拟环境（如果未激活）
-source star_summary_env/bin/activate
-
-# 运行分类工具
-python -m cli.main --username your_github_username
-```
-
-## 配置说明
-
-项目配置在 `config.yaml` 文件中，主要配置项包括：
-
-- **github**: GitHub API 相关配置
-- **classification**: 分类方法配置
-- **output**: 输出格式和路径配置
-- **ai_classification**: AI 分类相关配置（可选）
-
-详细配置说明请参考 [docs/USAGE.md](docs/USAGE.md)。
-
-## 分类模式
-
-### 1. 规则分类（rules）
-基于项目的编程语言、topics 和描述关键词进行分类。
-
-### 2. AI 分类（ai）
-使用大语言模型进行智能分类，需要配置 OpenAI API Key。
-
-### 3. 混合分类（hybrid）
-结合规则分类和 AI 分类的优势，提供最佳的分类效果。
-
-## 输出格式
-
-默认输出为 `README.md`，支持自定义文件名和路径：
+可以通过修改 `config.yaml` 添加自定义分类规则：
 
 ```yaml
-output:
-  format: "markdown"
-  base_dir: "output"
-  markdown:
-    filename: "README.md"  # 可自定义
-  paths:
-    main_readme: "README.md"
-    docs_readme: "docs/README.md"
+categories:
+  tech_stack:
+    my-category:
+      - "keyword1"
+      - "keyword2"
 ```
 
-## 虚拟环境管理
+## 🚀 部署
 
-为避免依赖冲突，项目强烈建议使用虚拟环境：
+### Docker 部署
 
-1. **自动设置**：使用提供的脚本自动创建和配置虚拟环境
-2. **手动设置**：按照上述步骤手动创建虚拟环境
-3. **环境激活**：每次使用前确保激活虚拟环境
+```bash
+# 构建镜像
+docker build -t star-summary .
 
-## 许可证
+# 运行容器
+docker run -e GITHUB_TOKEN=your_token_here star-summary
+```
 
-MIT License
+### GitHub Actions
 
-## 贡献
+项目包含预配置的 GitHub Actions 工作流，可以：
+- 每天自动更新星标项目
+- 手动触发更新
+- 自动部署到 GitHub Pages
 
-欢迎提交 Issue 和 Pull Request！
+### 本地定时任务
+
+```bash
+# 添加到 crontab
+0 2 * * * cd /path/to/star-summary && star-summary generate
+```
+
+## 📊 API 数据格式
+
+生成的 JSON API 数据结构：
+
+```json
+{
+  "metadata": {
+    "generated_at": "2023-01-01T00:00:00",
+    "version": "1.0.0",
+    "total_repos": 100,
+    "categories": ["ai-ml", "web-frontend", ...],
+    "languages": ["Python", "JavaScript", ...],
+    "stats": {...}
+  },
+  "repositories": [
+    {
+      "id": 123456,
+      "name": "repo-name",
+      "full_name": "owner/repo-name",
+      "description": "Repository description",
+      "html_url": "https://github.com/owner/repo-name",
+      "language": "Python",
+      "stargazers_count": 1000,
+      "categories": ["ai-ml", "python"],
+      ...
+    }
+  ]
+}
+```
+
+## 🤝 贡献
+
+欢迎贡献代码！请阅读 [贡献指南](CONTRIBUTING.md) 了解详情。
+
+1. Fork 项目
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送分支 (`git push origin feature/AmazingFeature`)
+5. 开启 Pull Request
+
+## 📝 更新日志
+
+查看 [CHANGELOG.md](CHANGELOG.md) 了解版本更新历史。
+
+## 📄 许可证
+
+此项目基于 MIT 许可证开源 - 查看 [LICENSE](LICENSE) 文件了解详情。
+
+## 🙏 致谢
+
+- [PyGithub](https://github.com/PyGithub/PyGithub) - GitHub API 客户端
+- [Click](https://github.com/pallets/click) - 命令行界面框架
+- [Jinja2](https://github.com/pallets/jinja) - 模板引擎
+- [colorama](https://github.com/tartley/colorama) - 终端颜色支持
+
+## 📞 支持
+
+如果你觉得这个项目有用，请给个 ⭐ Star！
+
+- 📧 Email: your-email@example.com
+- 🐛 Bug报告: [GitHub Issues](https://github.com/AllenHD/star-summary/issues)
+- 💬 讨论: [GitHub Discussions](https://github.com/AllenHD/star-summary/discussions)
 
 ---
 
-*这个文档是由 GitHub 星标项目分类整理工具自动生成的。*
+**Made with ❤️ by [AllenHD](https://github.com/AllenHD)**

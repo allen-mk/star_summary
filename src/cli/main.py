@@ -21,6 +21,7 @@ from src.config.settings import Config
 from src.github_api.service import GitHubService
 from src.classifier.classifier import ProjectClassifier
 from src.generator.service import DocumentGenerationService
+from src.generator.api import DataAPI
 from src.utils.logging import setup_logging, get_logger, LogMessages, ProgressLogger
 
 
@@ -138,7 +139,7 @@ def generate(ctx, token, config, output, output_format, no_cache, dry_run, max_r
         
         # 4. 保存输出
         progress.step(LogMessages.saving_output(str(output_path)))
-        _save_output(result, output_path, output_format, logger)
+        _save_output(result, classified_repos, output_path, output_format, logger)
         
         # 生成摘要
         summary = doc_service.get_generation_summary(result)
@@ -367,7 +368,7 @@ def _preview_operations(config: Dict[str, Any], output_path: Path,
         click.echo(f"   → 将生成: {output_path}/starred_repos.json")
 
 
-def _save_output(result: Dict[str, Any], output_path: Path, 
+def _save_output(result: Dict[str, Any], classified_repos: list, output_path: Path, 
                 output_format: str, logger):
     """保存输出文件"""
     if output_format in ['markdown', 'both']:
@@ -377,11 +378,12 @@ def _save_output(result: Dict[str, Any], output_path: Path,
         logger.info(f"📝 Markdown文档已保存: {markdown_file}")
     
     if output_format in ['json', 'both']:
+        # 使用新的 DataAPI 生成 JSON 数据
+        api_generator = DataAPI()
+        api_data = api_generator.generate_api_data(classified_repos)
+        
         json_file = output_path / 'starred_repos.json'
-        with open(json_file, 'w', encoding='utf-8') as f:
-            # 使用content字段中的json数据，如果没有则使用整个result
-            json_data = result['content'].get('json', result)
-            json.dump(json_data, f, indent=2, ensure_ascii=False, default=str)
+        api_generator.save_api_data(api_data, str(json_file))
         logger.info(f"📋 JSON数据已保存: {json_file}")
 
 
