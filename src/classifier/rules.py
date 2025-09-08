@@ -230,143 +230,30 @@ class RuleEngine:
     def _add_tech_stack_rules(self) -> None:
         """添加技术栈分类规则"""
         
-        # Web前端规则
-        self.add_rule(ClassificationRule(
-            name="web_frontend_frameworks",
-            condition=lambda repo: self._has_keywords(repo, ['react', 'vue', 'angular', 'svelte']),
-            category="web-frontend",
-            priority=20,
-            description="基于前端框架的分类"
-        ))
+        tech_keywords = self.category_manager.tech_stack_keywords
         
-        self.add_rule(ClassificationRule(
-            name="web_frontend_topics",
-            condition=lambda repo: self._has_topics(repo, ['frontend', 'ui', 'css', 'html', 'javascript']),
-            category="web-frontend",
-            priority=15,
-            description="基于前端相关主题的分类"
-        ))
-        
-        # Web后端规则
-        self.add_rule(ClassificationRule(
-            name="web_backend_frameworks",
-            condition=lambda repo: self._has_keywords(repo, ['express', 'django', 'flask', 'spring', 'laravel']),
-            category="web-backend",
-            priority=20,
-            description="基于后端框架的分类"
-        ))
-        
-        self.add_rule(ClassificationRule(
-            name="web_backend_topics",
-            condition=lambda repo: self._has_topics(repo, ['backend', 'api', 'rest', 'graphql', 'server']),
-            category="web-backend",
-            priority=15,
-            description="基于后端相关主题的分类"
-        ))
-        
-        # 移动开发规则
-        self.add_rule(ClassificationRule(
-            name="mobile_frameworks",
-            condition=lambda repo: self._has_keywords(repo, ['react-native', 'flutter', 'ionic', 'xamarin']),
-            category="mobile",
-            priority=20,
-            description="基于移动开发框架的分类"
-        ))
-        
-        self.add_rule(ClassificationRule(
-            name="mobile_topics",
-            condition=lambda repo: self._has_topics(repo, ['mobile', 'android', 'ios', 'app']),
-            category="mobile",
-            priority=15,
-            description="基于移动开发主题的分类"
-        ))
-        
-        # AI/ML规则
-        self.add_rule(ClassificationRule(
-            name="ai_ml_frameworks",
-            condition=lambda repo: self._has_keywords(repo, ['tensorflow', 'pytorch', 'scikit-learn', 'keras']),
-            category="ai-ml",
-            priority=20,
-            description="基于AI/ML框架的分类"
-        ))
-        
-        self.add_rule(ClassificationRule(
-            name="ai_ml_topics",
-            condition=lambda repo: self._has_topics(repo, ['machine-learning', 'deep-learning', 'ai', 'neural-network']),
-            category="ai-ml",
-            priority=15,
-            description="基于AI/ML主题的分类"
-        ))
-        
-        # 数据科学规则
-        self.add_rule(ClassificationRule(
-            name="data_science_tools",
-            condition=lambda repo: self._has_keywords(repo, ['pandas', 'numpy', 'matplotlib', 'jupyter']),
-            category="data-science",
-            priority=20,
-            description="基于数据科学工具的分类"
-        ))
-        
-        # DevOps规则
-        self.add_rule(ClassificationRule(
-            name="devops_tools",
-            condition=lambda repo: self._has_keywords(repo, ['docker', 'kubernetes', 'terraform', 'ansible']),
-            category="devops",
-            priority=20,
-            description="基于DevOps工具的分类"
-        ))
-        
-        # 游戏开发规则
-        self.add_rule(ClassificationRule(
-            name="game_development",
-            condition=lambda repo: self._has_keywords(repo, ['unity', 'unreal', 'godot', 'game']),
-            category="game-dev",
-            priority=20,
-            description="基于游戏开发相关的分类"
-        ))
-    
+        for category, keywords in tech_keywords.items():
+            self.add_rule(ClassificationRule(
+                name=f"tech_stack_{category}",
+                condition=lambda repo, kw=keywords: self._has_keywords(repo, kw) or self._has_topics(repo, kw),
+                category=category,
+                priority=20,
+                description=f"基于 {category} 技术栈的分类"
+            ))
+
     def _add_purpose_rules(self) -> None:
         """添加用途分类规则"""
         
-        # 框架规则
-        self.add_rule(ClassificationRule(
-            name="framework_keywords",
-            condition=lambda repo: self._has_keywords(repo, ['framework', 'platform']) or 
-                                  self._has_topics(repo, ['framework']),
-            category="framework",
-            priority=15,
-            description="基于框架关键词的分类"
-        ))
-        
-        # 工具规则
-        self.add_rule(ClassificationRule(
-            name="tool_keywords",
-            condition=lambda repo: self._has_keywords(repo, ['tool', 'cli', 'command']) or
-                                  self._has_topics(repo, ['cli', 'tool']),
-            category="tool",
-            priority=15,
-            description="基于工具关键词的分类"
-        ))
-        
-        # 学习资源规则
-        self.add_rule(ClassificationRule(
-            name="learning_keywords",
-            condition=lambda repo: self._has_keywords(repo, ['tutorial', 'learning', 'course', 'guide']) or
-                                  self._has_topics(repo, ['tutorial', 'learning', 'education']),
-            category="learning",
-            priority=15,
-            description="基于学习资源关键词的分类"
-        ))
-        
-        # 模板规则
-        self.add_rule(ClassificationRule(
-            name="template_keywords",
-            condition=lambda repo: self._has_keywords(repo, ['template', 'boilerplate', 'starter']) or
-                                  self._has_topics(repo, ['template', 'boilerplate']),
-            category="template",
-            priority=15,
-            description="基于模板关键词的分类"
-        ))
+        purpose_keywords = self.category_manager.purpose_keywords
+
+        for category, keywords in purpose_keywords.items():
+            self.add_rule(ClassificationRule(
+                name=f"purpose_{category}",
+                condition=lambda repo, kw=keywords: self._has_keywords(repo, kw) or self._has_topics(repo, kw),
+                category=category,
+                priority=15,
+                description=f"基于 {category} 用途的分类"
+            ))
     
     def _add_special_rules(self) -> None:
         """添加特殊项目规则"""
