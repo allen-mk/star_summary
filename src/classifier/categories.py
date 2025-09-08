@@ -94,16 +94,16 @@ class CategoryManager:
         """
         return {
             'web-frontend': [
-                'react', 'vue', 'angular', 'svelte', 'html', 'css', 'javascript',
-                'frontend', 'ui', 'ux', 'responsive', 'spa', 'pwa', 'webpack',
-                'vite', 'parcel', 'sass', 'less', 'tailwind', 'bootstrap',
-                'material-ui', 'antd', 'element-ui', 'nuxt', 'next', 'gatsby'
+                'react', 'vue', 'angular', 'svelte', 'solid.js', 'preact', 'html',
+                'css', 'javascript', 'frontend', 'ui', 'ux', 'responsive', 'spa',
+                'pwa', 'webpack', 'vite', 'parcel', 'sass', 'less', 'tailwind',
+                'bootstrap', 'material-ui', 'antd', 'element-ui', 'nuxt', 'next', 'gatsby'
             ],
             'web-backend': [
                 'express', 'koa', 'fastify', 'django', 'flask', 'fastapi',
-                'spring', 'laravel', 'rails', 'gin', 'echo', 'actix',
-                'backend', 'api', 'rest', 'graphql', 'microservice',
-                'server', 'middleware', 'orm', 'database', 'auth'
+                'spring', 'laravel', 'rails', 'gin', 'echo', 'actix', 'nestjs',
+                'asp.net', 'ktor', 'rocket', 'backend', 'api', 'rest', 'graphql',
+                'microservice', 'server', 'middleware', 'orm', 'database', 'auth'
             ],
             'mobile': [
                 'react-native', 'flutter', 'ionic', 'cordova', 'phonegap',
@@ -116,13 +116,15 @@ class CategoryManager:
                 'gui', 'native', 'cross-platform'
             ],
             'game-dev': [
-                'unity', 'unreal', 'godot', 'pygame', 'phaser',
-                'game', 'gaming', '2d', '3d', 'engine', 'graphics'
+                'unity', 'unreal', 'godot', 'pygame', 'phaser', 'bevy', 'raylib',
+                'monogame', 'libgdx', 'cocos2d', 'game', 'gaming', '2d', '3d',
+                'engine', 'graphics'
             ],
             'ai-ml': [
-                'tensorflow', 'pytorch', 'scikit-learn', 'keras',
-                'machine-learning', 'deep-learning', 'neural-network',
-                'ai', 'ml', 'nlp', 'computer-vision', 'reinforcement-learning'
+                'tensorflow', 'pytorch', 'scikit-learn', 'keras', 'huggingface',
+                'diffusers', 'langchain', 'llama', 'transformer', 'machine-learning',
+                'deep-learning', 'neural-network', 'ai', 'ml', 'nlp',
+                'computer-vision', 'reinforcement-learning'
             ],
             'data-science': [
                 'pandas', 'numpy', 'matplotlib', 'seaborn', 'plotly',
@@ -131,8 +133,8 @@ class CategoryManager:
             ],
             'devops': [
                 'docker', 'kubernetes', 'terraform', 'ansible', 'jenkins',
-                'gitlab-ci', 'github-actions', 'devops', 'ci-cd',
-                'infrastructure', 'deployment', 'monitoring'
+                'gitlab-ci', 'github-actions', 'helm', 'prometheus', 'grafana',
+                'argocd', 'devops', 'ci-cd', 'infrastructure', 'deployment', 'monitoring'
             ],
             'cloud': [
                 'aws', 'azure', 'gcp', 'cloud', 'serverless', 'lambda',
@@ -148,11 +150,13 @@ class CategoryManager:
             ],
             'security': [
                 'security', 'cryptography', 'encryption', 'vulnerability',
-                'penetration', 'cyber', 'auth', 'oauth', 'jwt'
+                'penetration', 'cyber', 'auth', 'oauth', 'oauth2', 'saml',
+                'oidc', 'iam', 'jwt'
             ],
             'testing': [
                 'test', 'testing', 'unittest', 'jest', 'mocha', 'pytest',
-                'selenium', 'cypress', 'automation', 'qa'
+                'selenium', 'cypress', 'playwright', 'puppeteer', 'xunit',
+                'nunit', 'automation', 'qa'
             ],
             'documentation': [
                 'documentation', 'docs', 'wiki', 'markdown', 'sphinx',
@@ -173,14 +177,15 @@ class CategoryManager:
             ],
             'library': [
                 'library', 'lib', 'package', 'module', 'component',
-                'utility', 'utils', 'helper'
+                'utility', 'utils', 'helper', 'sdk', 'toolkit'
             ],
             'tool': [
                 'tool', 'cli', 'command', 'utility', 'generator',
-                'builder', 'bundler', 'compiler'
+                'builder', 'bundler', 'compiler', 'plugin', 'extension', 'addon'
             ],
             'application': [
-                'app', 'application', 'software', 'program', 'client'
+                'app', 'application', 'software', 'program', 'client',
+                'service', 'platform', 'webapp', 'desktop-app', 'mobile-app'
             ],
             'learning': [
                 'tutorial', 'learning', 'course', 'education', 'guide',
