@@ -36,6 +36,7 @@ class CategoryManager:
                 'mobile': '移动应用开发',
                 'desktop': '桌面应用开发',
                 'game-dev': '游戏开发',
+                'graphics': '计算机图形学',
                 'ai-ml': '人工智能与机器学习',
                 'data-science': '数据科学',
                 'devops': 'DevOps运维',
@@ -44,7 +45,8 @@ class CategoryManager:
                 'iot': '物联网',
                 'security': '网络安全',
                 'testing': '软件测试',
-                'documentation': '文档工具'
+                'documentation': '文档工具',
+                'low-level': '底层系统'
             },
             
             # 用途分类
@@ -59,7 +61,8 @@ class CategoryManager:
                 'research': '研究项目',
                 'automation': '自动化工具',
                 'monitoring': '监控工具',
-                'deployment': '部署工具'
+                'deployment': '部署工具',
+                'awesome-list': 'Awesome列表'
             },
             
             # 编程语言分类
@@ -97,7 +100,8 @@ class CategoryManager:
                 'react', 'vue', 'angular', 'svelte', 'solid.js', 'preact', 'html',
                 'css', 'javascript', 'frontend', 'ui', 'ux', 'responsive', 'spa',
                 'pwa', 'webpack', 'vite', 'parcel', 'sass', 'less', 'tailwind',
-                'bootstrap', 'material-ui', 'antd', 'element-ui', 'nuxt', 'next', 'gatsby'
+                'bootstrap', 'material-ui', 'antd', 'element-ui', 'nuxt', 'next',
+                'gatsby', 'remix', 'astro', 'qwik'
             ],
             'web-backend': [
                 'express', 'koa', 'fastify', 'django', 'flask', 'fastapi',
@@ -120,25 +124,28 @@ class CategoryManager:
                 'monogame', 'libgdx', 'cocos2d', 'game', 'gaming', '2d', '3d',
                 'engine', 'graphics'
             ],
+            'graphics': [
+                'opengl', 'vulkan', 'directx', 'metal', 'webgl', 'webgpu', 'shader',
+                'rendering', 'computer-graphics', '3d-graphics', 'real-time-rendering'
+            ],
             'ai-ml': [
                 'tensorflow', 'pytorch', 'scikit-learn', 'keras', 'huggingface',
                 'diffusers', 'langchain', 'llama', 'transformer', 'machine-learning',
-                'deep-learning', 'neural-network', 'ai', 'ml', 'nlp',
-                'computer-vision', 'reinforcement-learning'
+                'deep-learning', 'neural-network', 'ai', 'ml', 'nlp', 'llm', 'agent',
+                'computer-vision', 'reinforcement-learning', 'data-mining'
             ],
             'data-science': [
-                'pandas', 'numpy', 'matplotlib', 'seaborn', 'plotly',
-                'jupyter', 'data-science', 'analytics', 'visualization',
-                'statistics', 'data-mining', 'big-data'
+                'pandas', 'numpy', 'matplotlib', 'seaborn', 'plotly', 'jupyter',
+                'data-science', 'analytics', 'visualization', 'statistics', 'big-data'
             ],
             'devops': [
-                'docker', 'kubernetes', 'terraform', 'ansible', 'jenkins',
-                'gitlab-ci', 'github-actions', 'helm', 'prometheus', 'grafana',
-                'argocd', 'devops', 'ci-cd', 'infrastructure', 'deployment', 'monitoring'
+                'docker', 'kubernetes', 'terraform', 'ansible', 'jenkins', 'devcontainer',
+                'gitlab-ci', 'github-actions', 'helm', 'prometheus', 'grafana', 'argocd',
+                'devops', 'ci-cd', 'infrastructure', 'deployment', 'monitoring', 'sre'
             ],
             'cloud': [
                 'aws', 'azure', 'gcp', 'cloud', 'serverless', 'lambda',
-                'functions', 'container', 'microservices'
+                'functions', 'container', 'microservices', 'cloud-native'
             ],
             'blockchain': [
                 'blockchain', 'ethereum', 'bitcoin', 'solidity', 'web3',
@@ -149,9 +156,9 @@ class CategoryManager:
                 'mqtt', 'internet-of-things'
             ],
             'security': [
-                'security', 'cryptography', 'encryption', 'vulnerability',
+                'security', 'cryptography', 'encryption', 'vulnerability', 'fuzzing',
                 'penetration', 'cyber', 'auth', 'oauth', 'oauth2', 'saml',
-                'oidc', 'iam', 'jwt'
+                'oidc', 'iam', 'jwt', 'sso'
             ],
             'testing': [
                 'test', 'testing', 'unittest', 'jest', 'mocha', 'pytest',
@@ -161,6 +168,10 @@ class CategoryManager:
             'documentation': [
                 'documentation', 'docs', 'wiki', 'markdown', 'sphinx',
                 'gitbook', 'docusaurus', 'vuepress'
+            ],
+            'low-level': [
+                'kernel', 'driver', 'os', 'embedded', 'assembly', 'bare-metal',
+                'low-level', 'systems-programming', 'compiler', 'interpreter'
             ]
         }
     
@@ -180,7 +191,7 @@ class CategoryManager:
                 'utility', 'utils', 'helper', 'sdk', 'toolkit'
             ],
             'tool': [
-                'tool', 'cli', 'command', 'utility', 'generator',
+                'tool', 'cli', 'command', 'utility', 'generator', 'linter'
                 'builder', 'bundler', 'compiler', 'plugin', 'extension', 'addon'
             ],
             'application': [
@@ -210,6 +221,9 @@ class CategoryManager:
             ],
             'deployment': [
                 'deploy', 'deployment', 'release', 'publish', 'distribution'
+            ],
+            'awesome-list': [
+                'awesome', 'awesome-list', 'curated', 'list', 'collection', 'resources'
             ]
         }
     
