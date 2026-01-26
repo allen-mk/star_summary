@@ -101,7 +101,7 @@ cache:
 # 日志配置
 logging:
   level: "INFO"  # 日志级别: DEBUG, INFO, WARNING, ERROR
-  file: "star_summary.log"  # 日志文件路径
+  file: "./output/star_summary.log"  # 日志文件路径
 
 # 分类规则配置
 categories:
@@ -132,6 +132,59 @@ categories:
       - "kubernetes"
       - "terraform"
       - "ansible"
+    llm:
+      - "llm"
+      - "gpt"
+      - "llama"
+      - "claude"
+      - "transformer"
+      - "deepseek"
+      - "huggingface"
+    agent:
+      - "agent"
+      - "autonomous"
+      - "crewai"
+      - "autogen"
+      - "copilot"
+    mcp:
+      - "mcp"
+      - "model-context-protocol"
+      - "mcp-server"
+    rag:
+      - "rag"
+      - "vector-db"
+      - "embeddings"
+      - "semantic-search"
+    diffusion:
+      - "diffusion"
+      - "stable-diffusion"
+      - "text-to-image"
+    speech-audio:
+      - "whisper"
+      - "speech-to-text"
+      - "tts"
+      - "asr"
+    browser-automation:
+      - "playwright"
+      - "puppeteer"
+      - "selenium"
+      - "browser-use"
+    database:
+      - "database"
+      - "sql"
+      - "nosql"
+      - "redis"
+      - "mongodb"
+    networking:
+      - "networking"
+      - "http"
+      - "grpc"
+      - "websocket"
+      - "proxy"
+    agent-skill:
+      - "agent-tool"
+      - "function-calling"
+      - "mcp-server"
 
   # 用途分类
   purpose:
