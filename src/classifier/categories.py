@@ -46,7 +46,17 @@ class CategoryManager:
                 'security': '网络安全',
                 'testing': '软件测试',
                 'documentation': '文档工具',
-                'low-level': '底层系统'
+                'low-level': '底层系统',
+                'llm': '大语言模型',
+                'agent': 'AI智能体',
+                'mcp': 'MCP协议',
+                'rag': 'RAG检索增强',
+                'diffusion': '图像生成',
+                'speech-audio': '语音处理',
+                'browser-automation': '浏览器自动化',
+                'agent-skill': 'Agent技能',
+                'database': '数据库/存储',
+                'networking': '网络通信'
             },
             
             # 用途分类
@@ -172,6 +182,50 @@ class CategoryManager:
             'low-level': [
                 'kernel', 'driver', 'os', 'embedded', 'assembly', 'bare-metal',
                 'low-level', 'systems-programming', 'compiler', 'interpreter'
+            ],
+            'llm': [
+                'llm', 'gpt', 'llama', 'claude', 'gemini', 'openai', 'anthropic',
+                'mistral', 'deepseek', 'qwen', 'chatgpt', 'groq', 'vllm', 'ollama',
+                'transformer', 'bert', 'huggingface', 'token', 'prompt'
+            ],
+            'agent': [
+                'agent', 'autonomous', 'autogen', 'crewai', 'langgraph', 'babyagi',
+                'autogpt', 'swarm', 'multi-agent', 'agentic', 'copilot', 'assistant',
+                'planning', 'reasoning', 'agent-skills'
+            ],
+            'mcp': [
+                'mcp', 'model-context-protocol', 'mcp-server', 'mcp-client',
+                'context-protocol', 'mcp-tool'
+            ],
+            'rag': [
+                'rag', 'retrieval-augmented-generation', 'vector-db', 'embeddings',
+                'chroma', 'chromadb', 'pinecone', 'weaviate', 'milvus', 'qdrant',
+                'llamaindex', 'faiss', 'knowledge-base', 'semantic-search'
+            ],
+            'diffusion': [
+                'stable-diffusion', 'diffusion', 'comfyui', 'flux', 'lora', 'controlnet',
+                'text-to-image', 'image-generation', 'midjourney', 'dalle'
+            ],
+            'speech-audio': [
+                'whisper', 'speech-to-text', 'text-to-speech', 'asr', 'tts', 'audio',
+                'voice', 'voice-cloning', 'audio-processing'
+            ],
+            'browser-automation': [
+                'playwright', 'puppeteer', 'selenium', 'browser-use', 'crawlee',
+                'crawler', 'scraper', 'spider', 'headless-browser'
+            ],
+            'agent-skill': [
+                'agent-tool', 'function-calling', 'tool-use', 'skill', 'action',
+                'capability', 'plugin-system', 'mcp-server'
+            ],
+            'database': [
+                'database', 'sql', 'mysql', 'postgresql', 'redis', 'mongodb', 
+                'sqlite', 'nosql', 'newsql', 'kv-store', 'cache', 'vector-db',
+                'elasticsearch', 'kafka', 'message-queue'
+            ],
+            'networking': [
+                'networking', 'http', 'tcp', 'udp', 'websocket', 'webrtc', 'rpc',
+                'grpc', 'proxy', 'vpn', 'dns', 'p2p', 'quic', 'network'
             ]
         }
     

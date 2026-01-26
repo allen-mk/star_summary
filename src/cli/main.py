@@ -12,6 +12,10 @@ import click
 from pathlib import Path
 from typing import Optional, Dict, Any
 from datetime import datetime
+from dotenv import load_dotenv
+
+# 加载环境变量
+load_dotenv()
 
 # 添加项目根目录到Python路径
 project_root = Path(__file__).parent.parent.parent
@@ -420,6 +424,49 @@ output:
     
     with open(config_file, 'w', encoding='utf-8') as f:
         f.write(basic_config)
+
+
+@cli.command()
+@click.option('--token', envvar='GITHUB_TOKEN', help='GitHub个人访问令牌')
+@click.option('--config', default='config.yaml', help='配置文件路径')
+@click.option('--output', default='./output/starred_urls.txt', help='输出文件路径')
+def export_urls(token, config, output):
+    """
+    🔗 导出项目链接
+    
+    将所有星标项目的URL导出到文本文件，每行一个链接。
+    """
+    try:
+        # 设置token到环境变量
+        if token:
+            os.environ['GITHUB_TOKEN'] = token
+            
+        # 加载配置
+        config_manager = Config(config)
+        
+        # 初始化GitHub服务
+        github_service = GitHubService(config_manager)
+        
+        click.echo("📡 正在获取星标项目...")
+        repos = github_service.fetch_starred_repos()
+        
+        if not repos:
+            click.echo("📭 没有找到星标项目")
+            return
+
+        click.echo(f"💾 正在导出 {len(repos)} 个链接到 {output}...")
+        
+        with open(output, 'w', encoding='utf-8') as f:
+            for repo in repos:
+                url = repo.get('html_url')
+                if url:
+                    f.write(f"{url}\n")
+        
+        click.echo(f"✅ 导出完成: {os.path.abspath(output)}")
+        
+    except Exception as e:
+        click.echo(f"❌ 导出失败: {e}", err=True)
+        raise click.Abort()
 
 
 if __name__ == '__main__':
