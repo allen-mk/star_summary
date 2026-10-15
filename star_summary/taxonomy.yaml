@@ -1,0 +1,210 @@
+# 分类词表：唯一事实来源。
+# 由旧 categories.py / rules.py / config.yaml 三处合并而来。
+# 代码只读不写；新增分类请改这里。
+
+groups:
+  tech_stack: 技术栈
+  purpose: 用途
+  language: 编程语言
+
+categories:
+  # ---- 技术栈 ----
+  web-frontend:
+    name: Web前端开发
+    group: tech_stack
+    keywords: [react, vue, angular, svelte, solid.js, preact, html, css, javascript, frontend, ui, ux, responsive, spa, pwa, webpack, vite, parcel, sass, less, tailwind, bootstrap, material-ui, antd, element-ui, nuxt, next, gatsby, remix, astro, qwik]
+  web-backend:
+    name: Web后端开发
+    group: tech_stack
+    keywords: [express, koa, fastify, django, flask, fastapi, spring, laravel, rails, gin, echo, actix, nestjs, asp.net, ktor, rocket, backend, api, rest, graphql, microservice, server, middleware, orm, database, auth]
+  mobile:
+    name: 移动应用开发
+    group: tech_stack
+    keywords: [react-native, flutter, ionic, cordova, phonegap, xamarin, swift, kotlin, android, ios, mobile, app, hybrid, native]
+  desktop:
+    name: 桌面应用开发
+    group: tech_stack
+    keywords: [electron, tauri, qt, gtk, wpf, winforms, javafx, swing, tkinter, pyqt, desktop, gui, native, cross-platform]
+  game-dev:
+    name: 游戏开发
+    group: tech_stack
+    keywords: [unity, unreal, godot, pygame, phaser, bevy, raylib, monogame, libgdx, cocos2d, game, gaming, 2d, 3d, engine, graphics]
+  graphics:
+    name: 计算机图形学
+    group: tech_stack
+    keywords: [opengl, vulkan, directx, metal, webgl, webgpu, shader, rendering, computer-graphics, 3d-graphics, real-time-rendering]
+  ai-ml:
+    name: 人工智能与机器学习
+    group: tech_stack
+    keywords: [tensorflow, pytorch, scikit-learn, keras, huggingface, diffusers, langchain, llama, transformer, machine-learning, deep-learning, neural-network, ai, ml, nlp, llm, agent, computer-vision, reinforcement-learning, data-mining]
+  data-science:
+    name: 数据科学
+    group: tech_stack
+    keywords: [pandas, numpy, matplotlib, seaborn, plotly, jupyter, data-science, analytics, visualization, statistics, big-data]
+  devops:
+    name: DevOps运维
+    group: tech_stack
+    keywords: [docker, kubernetes, terraform, ansible, jenkins, devcontainer, gitlab-ci, github-actions, helm, prometheus, grafana, argocd, devops, ci-cd, infrastructure, deployment, monitoring, sre]
+  cloud:
+    name: 云计算
+    group: tech_stack
+    keywords: [aws, azure, gcp, cloud, serverless, lambda, functions, container, microservices, cloud-native]
+  blockchain:
+    name: 区块链
+    group: tech_stack
+    keywords: [blockchain, ethereum, bitcoin, solidity, web3, defi, nft, smart-contract, cryptocurrency]
+  iot:
+    name: 物联网
+    group: tech_stack
+    keywords: [iot, arduino, raspberry-pi, embedded, sensor, mqtt, internet-of-things]
+  security:
+    name: 网络安全
+    group: tech_stack
+    keywords: [security, cryptography, encryption, vulnerability, fuzzing, penetration, cyber, auth, oauth, oauth2, saml, oidc, iam, jwt, sso]
+  testing:
+    name: 软件测试
+    group: tech_stack
+    keywords: [test, testing, unittest, jest, mocha, pytest, selenium, cypress, playwright, puppeteer, xunit, nunit, automation, qa]
+  documentation:
+    name: 文档工具
+    group: tech_stack
+    keywords: [documentation, docs, wiki, markdown, sphinx, gitbook, docusaurus, vuepress]
+  low-level:
+    name: 底层系统
+    group: tech_stack
+    keywords: [kernel, driver, os, embedded, assembly, bare-metal, low-level, systems-programming, compiler, interpreter]
+  llm:
+    name: 大语言模型
+    group: tech_stack
+    keywords: [llm, gpt, llama, claude, gemini, openai, anthropic, mistral, deepseek, qwen, chatgpt, groq, vllm, ollama, transformer, bert, huggingface, token, prompt]
+  agent:
+    name: AI智能体
+    group: tech_stack
+    keywords: [agent, autonomous, autogen, crewai, langgraph, babyagi, autogpt, swarm, multi-agent, agentic, copilot, assistant, planning, reasoning, agent-skills]
+  mcp:
+    name: MCP协议
+    group: tech_stack
+    keywords: [mcp, model-context-protocol, mcp-server, mcp-client, context-protocol, mcp-tool]
+  rag:
+    name: RAG检索增强
+    group: tech_stack
+    keywords: [rag, retrieval-augmented-generation, vector-db, embeddings, chroma, chromadb, pinecone, weaviate, milvus, qdrant, llamaindex, faiss, knowledge-base, semantic-search]
+  diffusion:
+    name: 图像生成
+    group: tech_stack
+    keywords: [stable-diffusion, diffusion, comfyui, flux, lora, controlnet, text-to-image, image-generation, midjourney, dalle]
+  speech-audio:
+    name: 语音处理
+    group: tech_stack
+    keywords: [whisper, speech-to-text, text-to-speech, asr, tts, audio, voice, voice-cloning, audio-processing]
+  browser-automation:
+    name: 浏览器自动化
+    group: tech_stack
+    keywords: [playwright, puppeteer, selenium, browser-use, crawlee, crawler, scraper, spider, headless-browser]
+  agent-skill:
+    name: Agent技能
+    group: tech_stack
+    keywords: [agent-tool, function-calling, tool-use, skill, action, capability, plugin-system, mcp-server]
+  database:
+    name: 数据库/存储
+    group: tech_stack
+    keywords: [database, sql, mysql, postgresql, redis, mongodb, sqlite, nosql, newsql, kv-store, cache, vector-db, elasticsearch, kafka, message-queue]
+  networking:
+    name: 网络通信
+    group: tech_stack
+    keywords: [networking, http, tcp, udp, websocket, webrtc, rpc, grpc, proxy, vpn, dns, p2p, quic, network]
+
+  # ---- 用途 ----
+  framework:
+    name: 开发框架
+    group: purpose
+    keywords: [framework, platform, foundation, base, core]
+  library:
+    name: 编程库
+    group: purpose
+    keywords: [library, lib, package, module, component, utility, utils, helper, sdk, toolkit]
+  tool:
+    name: 开发工具
+    group: purpose
+    keywords: [tool, cli, command, utility, generator, linter, builder, bundler, compiler, plugin, extension, addon]
+  application:
+    name: 应用程序
+    group: purpose
+    keywords: [app, application, software, program, client, service, platform, webapp, desktop-app, mobile-app]
+  learning:
+    name: 学习资源
+    group: purpose
+    keywords: [tutorial, learning, course, education, guide, example, demo, practice, exercise]
+  template:
+    name: 项目模板
+    group: purpose
+    keywords: [template, boilerplate, starter, scaffold, skeleton, blueprint]
+  example:
+    name: 示例代码
+    group: purpose
+    keywords: [example, demo, sample, showcase, proof-of-concept]
+  research:
+    name: 研究项目
+    group: purpose
+    keywords: [research, paper, academic, experiment, study]
+  automation:
+    name: 自动化工具
+    group: purpose
+    keywords: [automation, script, workflow, pipeline, bot]
+  monitoring:
+    name: 监控工具
+    group: purpose
+    keywords: [monitoring, metrics, logging, observability, dashboard, alerting]
+  deployment:
+    name: 部署工具
+    group: purpose
+    keywords: [deploy, deployment, release, publish, distribution]
+  awesome-list:
+    name: Awesome列表
+    group: purpose
+    keywords: [awesome, awesome-list, curated, list, collection, resources]
+
+  # ---- 编程语言 ----
+  lang-python: {name: Python, group: language}
+  lang-javascript: {name: JavaScript, group: language}
+  lang-typescript: {name: TypeScript, group: language}
+  lang-java: {name: Java, group: language}
+  lang-go: {name: Go, group: language}
+  lang-rust: {name: Rust, group: language}
+  lang-cpp: {name: C++, group: language}
+  lang-c: {name: C, group: language}
+  lang-csharp: {name: C#, group: language}
+  lang-php: {name: PHP, group: language}
+  lang-ruby: {name: Ruby, group: language}
+  lang-swift: {name: Swift, group: language}
+  lang-kotlin: {name: Kotlin, group: language}
+  lang-dart: {name: Dart, group: language}
+  lang-r: {name: R, group: language}
+  lang-matlab: {name: MATLAB, group: language}
+  lang-shell: {name: Shell, group: language}
+  lang-other: {name: 其他语言, group: language}
+
+# GitHub language -> 分类 id
+language_mappings:
+  Python: lang-python
+  JavaScript: lang-javascript
+  TypeScript: lang-typescript
+  Java: lang-java
+  Go: lang-go
+  Rust: lang-rust
+  C++: lang-cpp
+  C: lang-c
+  C#: lang-csharp
+  PHP: lang-php
+  Ruby: lang-ruby
+  Swift: lang-swift
+  Kotlin: lang-kotlin
+  Dart: lang-dart
+  R: lang-r
+  MATLAB: lang-matlab
+  Shell: lang-shell
+  Bash: lang-shell
+  PowerShell: lang-shell
+
+special:
+  uncategorized: 未分类
