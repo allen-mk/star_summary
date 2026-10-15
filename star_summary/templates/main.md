@@ -8,21 +8,22 @@
 
 ## 📋 目录
 
-{% for category_id, cat_items in grouped.items() -%}
-- [{{ taxonomy.display_name(category_id) }}](#{{ category_id }}) ({{ cat_items | length }})
+{% for category_name, cat_items in grouped.items() -%}
+- [{{ category_name }}](#{{ category_name }}) ({{ cat_items | length }})
 {% endfor %}
 ---
 
-{% for category_id, cat_items in grouped.items() -%}
-## {{ taxonomy.display_name(category_id) }}
+{% for category_name, cat_items in grouped.items() -%}
+## {{ category_name }}
 
 > **项目数量:** {{ cat_items | length | format_number }}
 
 {% for item in cat_items -%}
 ### [{{ item.repo.name }}]({{ item.repo.html_url }})
 
-{% if item.repo.description -%}
-{{ item.repo.description }}
+{% set blurb = item.classification.summary or item.repo.description -%}
+{% if blurb -%}
+{{ blurb }}
 {% else -%}
 *暂无描述*
 {% endif %}
@@ -53,7 +54,7 @@
 
 ### 按分类分布
 {% for category, count in stats.category_stats.items() -%}
-- **{{ taxonomy.display_name(category) }}:** {{ count | format_number }} 个项目
+- **{{ category }}:** {{ count | format_number }} 个项目
 {% endfor %}
 
 ---

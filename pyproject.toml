@@ -27,7 +27,7 @@ where = ["."]
 include = ["star_summary*"]
 
 [tool.setuptools.package-data]
-star_summary = ["taxonomy.yaml", "templates/*.md"]
+star_summary = ["templates/*.md"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -7,13 +7,13 @@ from pathlib import Path
 
 import click
 
+from .brief import load_brief, resolve_category
 from .cache import JsonCache
-from .classify import classify_batch
-from .config import load_config
+from .config import load_config, model_env_names, model_ready
 from .fetch import GitHubClient, fetch_starred
-from .models import Repo
+from .model import ModelClient, ModelError
+from .models import Assignment, Classification, Repo
 from .render import render_json, render_markdown
-from .taxonomy import Taxonomy
 
 
 @click.group()
@@ -50,9 +50,12 @@ def generate(config_path, output, output_format, no_cache, force_refresh, max_re
     if not cfg["github"]["token"]:
         click.echo("错误: 需要 GitHub Token，请设置 GITHUB_TOKEN 环境变量", err=True)
         sys.exit(1)
+    if not model_ready(cfg):
+        base_env, key_env, name_env = model_env_names(cfg)
+        click.echo(f"错误: 需要模型接入，请设置 {base_env}、{key_env} 和 {name_env}", err=True)
+        sys.exit(1)
 
     out_dir = Path(output or cfg["output"]["base_dir"])
-    out_dir.mkdir(parents=True, exist_ok=True)
     fmt = output_format or cfg["output"]["format"]
 
     client = _make_client(cfg)
@@ -64,18 +67,43 @@ def generate(config_path, output, output_format, no_cache, force_refresh, max_re
         raw_repos = raw_repos[:max_repos]
     click.echo(f"获取到 {len(raw_repos)} 个项目")
 
-    taxonomy = Taxonomy.load_default()
+    brief = load_brief(cfg.get("brief_path") or "classify.yaml")
     repos = [Repo.from_dict(r) for r in raw_repos]
-    items = classify_batch(repos, taxonomy)
+    model_cfg = cfg["model"]
+    model = ModelClient(
+        base_url=model_cfg["base_url"],
+        api_key=model_cfg["api_key"],
+        model=model_cfg["model"],
+        timeout=int(model_cfg.get("timeout") or 60),
+    )
+    language = str(cfg["output"].get("description_language") or "").strip().lower()
+    try:
+        assigned = model.assign(brief, repos, description_language=language)
+    except ModelError as exc:
+        click.echo(f"错误: {exc}", err=True)
+        sys.exit(1)
+    items = []
+    for repo in repos:
+        value = assigned[repo.full_name]
+        if isinstance(value, Assignment):
+            category, summary = value.category, value.summary
+        else:
+            category, summary = value, ""
+        items.append(
+            repo.with_classification(
+                Classification(category=resolve_category(category, brief), summary=summary)
+            )
+        )
+    out_dir.mkdir(parents=True, exist_ok=True)
 
     if fmt in ("markdown", "both"):
-        md = render_markdown(items, taxonomy)
+        md = render_markdown(items, brief)
         path = out_dir / cfg["output"]["markdown_filename"]
         path.write_text(md, encoding="utf-8")
         click.echo(f"Markdown 已保存: {path}")
 
     if fmt in ("json", "both"):
-        js = render_json(items, taxonomy)
+        js = render_json(items)
         path = out_dir / cfg["output"]["json_filename"]
         path.write_text(js, encoding="utf-8")
         click.echo(f"JSON 已保存: {path}")
@@ -107,16 +135,26 @@ def init(force):
         return
     template = """# star-summary 配置
 output:
-  format: markdown   # markdown | json | both
+  format: both   # markdown | json | both
   base_dir: output
+  description_language: ""  # 留空用原描述。语言代号如 zh-cn、en
 
 cache:
   enabled: true
   ttl_hours: 24
   cache_dir: .cache
+
+model:
+  base_url_env: STAR_SUMMARY_BASE_URL
+  api_key_env: STAR_SUMMARY_API_KEY
+  model_env: STAR_SUMMARY_MODEL
+
+brief_path: classify.yaml
 """
     target.write_text(template, encoding="utf-8")
-    click.echo(f"已创建 {target}，请设置 GITHUB_TOKEN 环境变量后运行: star-summary generate")
+    click.echo(
+        f"已创建 {target}，请设置 GITHUB_TOKEN、STAR_SUMMARY_BASE_URL、STAR_SUMMARY_API_KEY 和 STAR_SUMMARY_MODEL 后运行: star-summary generate"
+    )
 
 
 if __name__ == "__main__":

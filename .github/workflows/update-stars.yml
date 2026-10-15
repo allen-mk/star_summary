@@ -23,8 +23,11 @@ jobs:
 
       - name: Generate
         env:
-          # 必须是个人 PAT（public_repo + read:user），不是默认 GITHUB_TOKEN
+          # 个人 PAT，不是 Actions 默认的 GITHUB_TOKEN。公开星标用 public_repo；含私有星标时用 repo。
           GITHUB_TOKEN: ${{ secrets.STAR_PAT }}
+          STAR_SUMMARY_BASE_URL: ${{ secrets.STAR_SUMMARY_BASE_URL }}
+          STAR_SUMMARY_API_KEY: ${{ secrets.STAR_SUMMARY_API_KEY }}
+          STAR_SUMMARY_MODEL: ${{ secrets.STAR_SUMMARY_MODEL }}
         run: star-summary generate --format both --output output --no-cache
 
       - name: Commit

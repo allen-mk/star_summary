@@ -19,16 +19,15 @@ def test_repo_from_dict_keeps_core_fields():
     assert repo.topics == raw["topics"]
 
 
-def test_classification_defaults_to_rules_method():
-    c = Classification(categories=["lang-python"])
-    assert c.method == "rules"
-    assert 0.0 <= c.confidence <= 1.0
+def test_classification_is_one_category():
+    category = Classification(category="编程工具")
+    assert category.category == "编程工具"
 
 
 def test_classified_repo_is_flat_and_serialisable():
     raw = load_sample()[0]
     repo = Repo.from_dict(raw)
-    cr = repo.with_classification(Classification(categories=["lang-typescript", "tool"]))
-    data = cr.to_dict()
+    classified = repo.with_classification(Classification(category="编程工具"))
+    data = classified.to_dict()
     assert data["full_name"] == raw["full_name"]
-    assert data["classification"]["categories"] == ["lang-typescript", "tool"]
+    assert data["category"] == "编程工具"

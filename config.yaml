@@ -2,10 +2,11 @@
 # 所有字段都有默认值，本文件可选。
 
 output:
-  format: markdown        # markdown | json | both
+  format: both            # markdown | json | both
   base_dir: output        # 输出目录
   markdown_filename: README.md
   json_filename: starred_repos.json
+  description_language: zh-cn  # 留空则使用 GitHub 原描述。语言代号如 zh-cn、en
 
 cache:
   enabled: true
@@ -19,3 +20,11 @@ github:
 
 logging:
   level: INFO
+
+# 模型接入。地址、密钥和模型名都从环境变量读取，不写进这个文件。
+model:
+  base_url_env: STAR_SUMMARY_BASE_URL
+  api_key_env: STAR_SUMMARY_API_KEY
+  model_env: STAR_SUMMARY_MODEL
+
+brief_path: classify.yaml

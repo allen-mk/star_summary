@@ -10,8 +10,8 @@ from typing import Any, Dict, List
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from .brief import Brief
 from .models import ClassifiedRepo
-from .taxonomy import Taxonomy
 
 _TEMPLATE_DIR = Path(__file__).parent / "templates"
 
@@ -26,8 +26,7 @@ def compute_stats(items: List[ClassifiedRepo]) -> Dict[str, Any]:
         total_stars += repo.stargazers_count
         if repo.language:
             language_counter[repo.language] += 1
-        for cat in item.classification.categories:
-            category_counter[cat] += 1
+        category_counter[item.classification.category] += 1
 
     return {
         "total_repos": len(items),
@@ -38,15 +37,16 @@ def compute_stats(items: List[ClassifiedRepo]) -> Dict[str, Any]:
     }
 
 
-def _group_by_category(items: List[ClassifiedRepo]) -> Dict[str, List[ClassifiedRepo]]:
-    grouped: Dict[str, List[ClassifiedRepo]] = {}
+def _group_by_category(items: List[ClassifiedRepo], brief: Brief) -> Dict[str, List[ClassifiedRepo]]:
+    grouped: Dict[str, List[ClassifiedRepo]] = {name: [] for name in brief.names()}
     for item in items:
-        for cat in item.classification.categories:
-            grouped.setdefault(cat, []).append(item)
-    # 组内按星标排序，组按数量排序
+        grouped.setdefault(item.classification.category, []).append(item)
     for cat_items in grouped.values():
         cat_items.sort(key=lambda i: i.repo.stargazers_count, reverse=True)
-    return dict(sorted(grouped.items(), key=lambda kv: len(kv[1]), reverse=True))
+    ordered = [(name, grouped[name]) for name in brief.names() if grouped.get(name)]
+    extra = [name for name in grouped if name not in brief.names() and grouped[name]]
+    ordered.extend((name, grouped[name]) for name in extra)
+    return dict(ordered)
 
 
 def _env(template_dir: Path) -> Environment:
@@ -82,23 +82,22 @@ def _env(template_dir: Path) -> Environment:
 
 def render_markdown(
     items: List[ClassifiedRepo],
-    taxonomy: Taxonomy,
+    brief: Brief,
     template_dir: Path = _TEMPLATE_DIR,
 ) -> str:
     env = _env(template_dir)
     template = env.get_template("main.md")
-    grouped = _group_by_category(items)
+    grouped = _group_by_category(items, brief)
     stats = compute_stats(items)
     return template.render(
         items=items,
         grouped=grouped,
         stats=stats,
-        taxonomy=taxonomy,
         generated_at=datetime.now(timezone.utc).astimezone(),
     )
 
 
-def render_json(items: List[ClassifiedRepo], taxonomy: Taxonomy) -> str:
+def render_json(items: List[ClassifiedRepo]) -> str:
     stats = compute_stats(items)
     payload = {
         "metadata": {

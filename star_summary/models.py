@@ -49,11 +49,17 @@ class Repo:
 
 
 @dataclass
+class Assignment:
+    """一次归属：类别，以及按简介语言写出的一句简介。"""
+
+    category: str
+    summary: str = ""
+
+
+@dataclass
 class Classification:
-    categories: List[str]
-    method: str = "rules"
-    confidence: float = 0.8
-    reasoning: str = ""
+    category: str
+    summary: str = ""
 
 
 @dataclass
@@ -63,5 +69,7 @@ class ClassifiedRepo:
 
     def to_dict(self) -> Dict[str, Any]:
         data = asdict(self.repo)
-        data["classification"] = asdict(self.classification)
+        data["category"] = self.classification.category
+        if self.classification.summary:
+            data["summary"] = self.classification.summary
         return data

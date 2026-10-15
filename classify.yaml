@@ -1,0 +1,26 @@
+# 分类说明。命令跑法和技能跑法都读这份文件。
+# 没有合适类别时使用「未归类」。不要删掉它。
+
+categories:
+  - name: 人工智能
+    description: 模型、智能体、机器学习和提示词相关的星标。按它是干什么的判断，不按实现语言。
+  - name: 编程工具
+    description: 编辑器、构建、调试、命令行，以及日常写代码会用到的工具。
+  - name: Web 开发
+    description: 浏览器里的应用、前后端框架、网站和 HTTP 接口。
+  - name: 客户端与界面
+    description: 桌面应用、移动应用和界面组件。
+  - name: 系统与基础设施
+    description: 操作系统、运行时、容器、部署和云。
+  - name: 数据与存储
+    description: 数据库、数据管道和分析。
+  - name: 安全
+    description: 认证、加密、漏洞和安全工具。
+  - name: 学习与资料
+    description: 教程、书籍、手册和资料合集。
+  - name: 未归类
+    description: 没有更合适的类别时放这里。
+
+preferences: ""
+
+hard_rules: ""
