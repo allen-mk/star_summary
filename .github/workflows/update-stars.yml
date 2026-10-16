@@ -28,12 +28,13 @@ jobs:
           STAR_SUMMARY_BASE_URL: ${{ secrets.STAR_SUMMARY_BASE_URL }}
           STAR_SUMMARY_API_KEY: ${{ secrets.STAR_SUMMARY_API_KEY }}
           STAR_SUMMARY_MODEL: ${{ secrets.STAR_SUMMARY_MODEL }}
-        run: star-summary generate --output output --no-cache
+        run: star-summary generate --no-cache
 
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add output/
+          git add -- STARS.md
+          if [ -f starred_repos.json ]; then git add -- starred_repos.json; fi
           git diff --staged --quiet || git commit -m "chore: update starred projects"
           git push

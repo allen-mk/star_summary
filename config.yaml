@@ -3,8 +3,8 @@
 
 output:
   format: markdown        # markdown | json | both。默认只生成目录
-  base_dir: output        # 输出目录
-  markdown_filename: README.md
+  base_dir: .             # 仓库根目录。不要用 README.md，那是项目说明
+  markdown_filename: STARS.md
   json_filename: starred_repos.json
   description_language: zh-cn  # 留空则使用 GitHub 原描述。语言代号如 zh-cn、en
 

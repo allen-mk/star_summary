@@ -43,8 +43,8 @@ description: 把当前用户的 GitHub 星标做成按类别阅读的目录，�
 
 `output.format` 为 `markdown` 时只写目录，为 `both` 时目录和分类数据都写，为 `json` 时只写分类数据。默认是 `markdown`。
 
-目录是 Markdown，默认 `output/README.md`。类别顺序与分类说明一致。没有星标的类别不出现。同一类别里按星数从高到低。
+目录路径来自 `config.yaml` 的 `output.base_dir` 和 `output.markdown_filename`。当前是仓库根目录的 `STARS.md`。类别顺序与分类说明一致。没有星标的类别不出现。同一类别里按星数从高到低。
 
 读取 `config.yaml` 的 `output.description_language`。它是语言代号，例如 `zh-cn`、`en`，大小写不敏感。留空或没有这个字段时，目录简介用 GitHub 原描述。设了代号后，用仓库名、描述、语言和 topics 为每个星标写一句该语言的简介，目录用这句替换原描述；没有描述时也要写。不要翻译仓库名。
 
-分类数据是 JSON，默认 `output/starred_repos.json`。`metadata` 包含 `generated_at` 和 `total_repos`。`repositories` 的每条包含 `full_name`、`html_url`、`description`、`language`、`topics`、`stargazers_count` 和恰好一个 `category`。`description` 始终是 GitHub 原描述。设了简介语言时再加 `summary`，内容与目录里的简介相同。
+分类数据是 JSON，路径是 `output.base_dir` 加上 `output.json_filename`。当前文件名是 `starred_repos.json`。`metadata` 包含 `generated_at` 和 `total_repos`。`repositories` 的每条包含 `full_name`、`html_url`、`description`、`language`、`topics`、`stargazers_count` 和恰好一个 `category`。`description` 始终是 GitHub 原描述。设了简介语言时再加 `summary`，内容与目录里的简介相同。

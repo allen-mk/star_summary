@@ -28,7 +28,7 @@ export STAR_SUMMARY_MODEL=gpt-4o-mini
 ## 使用
 
 ```bash
-# 默认只生成目录，写到 output/
+# 按 config.yaml，目录写到仓库根目录的 STARS.md
 star-summary generate
 
 # 验证 Token
