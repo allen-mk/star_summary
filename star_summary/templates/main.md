@@ -9,7 +9,7 @@
 ## 📋 目录
 
 {% for category_name, cat_items in grouped.items() -%}
-- [{{ category_name }}](#{{ category_name }}) ({{ cat_items | length }})
+- [{{ category_name }}](#{{ category_name | github_slug }}) ({{ cat_items | length }})
 {% endfor %}
 ---
 

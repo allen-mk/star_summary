@@ -22,6 +22,17 @@ def test_stats_not_zero():
     assert stats["category_stats"] == {"编程工具": len(items)}
 
 
+def test_toc_anchor_matches_preview_slug():
+    from star_summary.brief import Brief, CategorySpec
+
+    repo = Repo(name="demo", full_name="o/demo", html_url="https://github.com/o/demo")
+    items = [repo.with_classification(Classification(category="Agent-Skills"))]
+    brief = Brief([CategorySpec("Agent-Skills", "")], "", "")
+    md = render_markdown(items, brief)
+    assert "](#agent-skills)" in md
+    assert "](#Agent-Skills)" not in md
+
+
 def test_render_markdown_contains_sections():
     items = classified()
     md = render_markdown(items, default_brief())
