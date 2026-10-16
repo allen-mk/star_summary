@@ -3,10 +3,18 @@
 
 categories:
   - name: 人工智能
-    description: 模型、机器学习、提示词，以及图像、视频等生成式应用。按它是干什么的判断，不按实现语言。以写代码为主要用途的智能体不归这里。
+    description: 模型、机器学习、提示词、训练和推理，以及图像、视频、语音等生成式应用。Agent、Agent-Skills、Agent-MCP 和 Agent-Plugin 不归这里。
+  - name: Agent
+    description: 可运行的智能体、编程智能体、智能体框架和多智能体系统。技能合集不归这里。morluto/rea 是逆向工程智能体，归入本类。
+  - name: Agent-Skills
+    description: 仓库主体是给 Agent 用的技能包、技能文件、技能清单、技能注册表或角色技能说明。简介里出现智能体，只要主体是技能合集，仍归这里。morluto/rea 不是技能合集，禁止归入本类。
+  - name: Agent-MCP
+    description: MCP 服务器、MCP SDK、MCP 客户端，以及把外部工具接进 MCP 的桥。
+  - name: Agent-Plugin
+    description: 编辑器、IDE 或编程智能体的插件、扩展和认证插件。技能合集不归这里。完整的编辑器本身不归这里。
   - name: 编程工具
-    description: 编辑器、构建、调试、命令行，以及日常写代码会用到的工具，包括编程智能体。通用编辑器也在这里。
-  - name: Web 开发
+    description: 编辑器、构建、调试、命令行，以及日常写代码会用到的工具。编程智能体归入 Agent，插件归入 Agent-Plugin，技能合集归入 Agent-Skills。
+  - name: Web开发
     description: 浏览器里的应用、前后端框架、网站和 HTTP 接口。游戏和游戏网络不归这里。
   - name: 客户端与界面
     description: 桌面应用、移动应用和界面组件。游戏本体、游戏引擎和代理客户端不归这里。
@@ -19,14 +27,22 @@ categories:
   - name: 安全
     description: 认证、加密、漏洞、逆向和开源情报。代理软件和广告过滤规则不归这里。
   - name: 学习与资料
-    description: 教程、书籍、手册和资料合集。能运行的软件按用途归类，不放这里。
+    description: 教程、书籍、手册和资料合集。技能清单归入 Agent-Skills。能运行的软件按用途归类，不放这里。
   - name: 未归类
     description: 没有更合适的类别时放这里。
 
 preferences: ""
 
 hard_rules: |
-  以写代码为主要用途的智能体归入编程工具。模型、提示词、图像和视频生成归入人工智能。
+  morluto/rea 的类别必须是 Agent，不能是 Agent-Skills。它的 topics 里虽有 agent-skills，但仓库本身是逆向工程智能体。
+  一个星标只进一个类别。优先顺序是 Agent-Skills、Agent-MCP、Agent-Plugin、Agent，然后才是人工智能和编程工具。
+  只有仓库的主要交付物是技能文件、技能清单、技能注册表或角色技能说明时，才归入 Agent-Skills。不要因为简介里写了智能体就放进 Agent。
+  agency-agents、ECC、awesome-copilot、superpowers、anthropics/skills、mattpocock/skills、awesome-openclaw-skills 归入 Agent-Skills。
+  可运行的智能体或智能体应用归入 Agent。topics 里出现 skill 不够，不能因此离开 Agent。claude-code、codex、aider、opencode、rea、paperclip 归入 Agent。
+  编辑器规则包归入 Agent-Plugin，不要归入 Agent-Skills。awesome-cursorrules 归入 Agent-Plugin。
+  MCP 服务器、MCP SDK 和 MCP 桥归入 Agent-MCP。连接游戏引擎的 MCP 仍归入 Agent-MCP。
+  编辑器或编程智能体的插件和扩展归入 Agent-Plugin。技能合集不要归入 Agent-Plugin。完整的编辑器归入编程工具。
+  模型、提示词、训练推理、图像、视频和语音生成归入人工智能。
   游戏本体、引擎、服务器、地图编辑器和游戏行为树归入游戏开发。
   代理客户端和代理核心都归入系统与基础设施，不归入安全。
-  教程、书籍和清单归入学习与资料。能运行的工具按用途归类。
+  教程、书籍和普通清单归入学习与资料。能运行的工具按用途归类。

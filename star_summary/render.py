@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -14,6 +15,16 @@ from .brief import Brief
 from .models import ClassifiedRepo
 
 _TEMPLATE_DIR = Path(__file__).parent / "templates"
+_SLUG_PUNCT = re.compile(
+    r"[\]\[!\"#$%&'()*+,./:;<=>?@\\^_`{|}~。，、；：？！…—·「」『』（）【】《》〈〉“”‘’]"
+)
+
+
+def github_slug(heading: str) -> str:
+    """与 GitHub、Cursor 预览一致：小写，空格变连字符。"""
+    text = _SLUG_PUNCT.sub("", str(heading).strip().lower())
+    text = re.sub(r"\s+", "-", text)
+    return text.strip("-")
 
 
 def compute_stats(items: List[ClassifiedRepo]) -> Dict[str, Any]:
@@ -77,6 +88,7 @@ def _env(template_dir: Path) -> Environment:
 
     env.filters["format_number"] = format_number
     env.filters["format_date"] = format_date
+    env.filters["github_slug"] = github_slug
     return env
 
 
