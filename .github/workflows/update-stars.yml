@@ -1,0 +1,40 @@
+name: Update starred projects
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install
+        run: pip install .
+
+      - name: Generate
+        env:
+          # 个人 PAT，不是 Actions 默认的 GITHUB_TOKEN。公开星标用 public_repo；含私有星标时用 repo。
+          GITHUB_TOKEN: ${{ secrets.STAR_PAT }}
+          STAR_SUMMARY_BASE_URL: ${{ secrets.STAR_SUMMARY_BASE_URL }}
+          STAR_SUMMARY_API_KEY: ${{ secrets.STAR_SUMMARY_API_KEY }}
+          STAR_SUMMARY_MODEL: ${{ secrets.STAR_SUMMARY_MODEL }}
+        run: star-summary generate --no-cache
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -- STARS.md
+          if [ -f starred_repos.json ]; then git add -- starred_repos.json; fi
+          git diff --staged --quiet || git commit -m "chore: update starred projects"
+          git push

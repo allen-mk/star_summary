@@ -1,194 +1,30 @@
-# GitHub 星标项目分类整理工具配置文件
+# star-summary 配置
+# 所有字段都有默认值，本文件可选。
 
-# GitHub API 配置
-github:
-  token_env: "GITHUB_TOKEN"  # GitHub Token 环境变量名
-  username: ""  # GitHub 用户名（可选，从 token 自动获取）
-  api_base_url: "https://api.github.com"  # GitHub API 基础URL
-  timeout: 30  # 请求超时时间（秒）
-  retry_count: 3  # 重试次数
-  retry_delay: 1  # 重试延迟（秒）
-  per_page: 100  # 每页获取的项目数
-  rate_limit:
-    check_threshold: 100  # 速率限制检查阈值
-    check_interval: 300  # 检查间隔（秒）
-    wait_on_limit: true  # 遇到限制时是否等待
-    max_wait_time: 3600  # 最大等待时间（秒）
-
-# 数据获取器配置
-fetcher:
-  batch_size: 100  # 批次大小
-  show_progress: true  # 是否显示进度条
-  include_forks: true  # 是否包含分叉项目
-  include_archived: true  # 是否包含归档项目
-  max_repos: null  # 最大获取项目数（null为不限制）
-  fields:  # 要提取的数据字段
-    - "id"
-    - "name"
-    - "full_name"
-    - "description"
-    - "html_url"
-    - "clone_url"
-    - "ssh_url"
-    - "homepage"
-    - "private"
-    - "fork"
-    - "archived"
-    - "disabled"
-    - "stargazers_count"
-    - "watchers_count"
-    - "forks_count"
-    - "open_issues_count"
-    - "size"
-    - "language"
-    - "topics"
-    - "created_at"
-    - "updated_at"
-    - "pushed_at"
-    - "license"
-    - "owner"
-
-# 分类配置
-classification:
-  method: "rules"  # 分类方法: rules, ai, hybrid
-
-# AI 分类配置（可选）
-ai_classification:
-  enabled: true  # 是否启用 AI 分类
-  api_key_env: "OPENAI_API_KEY"  # OpenAI API Key 环境变量名
-  model: "gpt-3.5-turbo"  # 使用的模型: gpt-3.5-turbo, gpt-4
-  always_use: false  # 是否总是使用 AI 分类
-  fallback_to_rules: true  # AI 失败时回退到规则分类
-  batch_size: 100  # 批处理大小
-  max_retries: 3  # 最大重试次数
-
-# 输出配置
 output:
-  format: "markdown"  # 输出格式: markdown, json, both
-  base_dir: "output"  # 输出基础目录
-  
-  # Markdown 输出配置
-  markdown:
-    filename: "README.md"  # 默认输出文件名（改为README.md）
-    template: "templates/main.md"  # 模板文件路径
-    include_toc: true  # 是否包含目录
-    
-  # JSON 输出配置  
-  json:
-    filename: "starred-projects.json"  # JSON数据文件名
-    pretty_print: true  # 是否格式化输出
-    
-  # 文件路径配置（支持多种输出路径）
-  paths:
-    # 项目根目录的主README
-    main_readme: "README.md"  
-    # 文档目录的README
-    docs_readme: "docs/README.md"  
-    # 分类详情目录
-    categories_dir: "output/categories"
-    # 原始数据备份
-    raw_data: "output/raw/starred-repos.json"
+  format: markdown        # markdown | json | both。默认只生成目录
+  base_dir: .             # 仓库根目录。不要用 README.md，那是项目说明
+  markdown_filename: STARS.md
+  json_filename: starred_repos.json
+  description_language: zh-cn  # 留空则使用 GitHub 原描述。语言代号如 zh-cn、en
 
-# 缓存配置
 cache:
-  enabled: true  # 是否启用缓存
-  ttl_hours: 24  # 缓存有效期（小时）
-  cache_dir: ".cache"  # 缓存目录
-  format: "json"  # 缓存格式: json, pickle
-  auto_cleanup: true  # 是否自动清理过期缓存
-  max_age_hours: 168  # 最大缓存时间（7天）
+  enabled: true
+  ttl_hours: 24
+  cache_dir: .cache
 
-# 日志配置
+github:
+  token_env: GITHUB_TOKEN # Token 从环境变量读取，不写进配置
+  timeout: 30
+  per_page: 100
+
 logging:
-  level: "INFO"  # 日志级别: DEBUG, INFO, WARNING, ERROR
-  file: "./output/star_summary.log"  # 日志文件路径
+  level: INFO
 
-# 分类规则配置
-categories:
-  # 技术栈分类
-  tech_stack:
-    web-frontend:
-      - "react"
-      - "vue"
-      - "angular"
-      - "svelte"
-    web-backend:
-      - "express"
-      - "django"
-      - "flask"
-      - "fastapi"
-    mobile:
-      - "flutter"
-      - "react-native"
-      - "swift"
-      - "kotlin"
-    ai-ml:
-      - "tensorflow"
-      - "pytorch"
-      - "scikit-learn"
-      - "pandas"
-    devops:
-      - "docker"
-      - "kubernetes"
-      - "terraform"
-      - "ansible"
-    llm:
-      - "llm"
-      - "gpt"
-      - "llama"
-      - "claude"
-      - "transformer"
-      - "deepseek"
-      - "huggingface"
-    agent:
-      - "agent"
-      - "autonomous"
-      - "crewai"
-      - "autogen"
-      - "copilot"
-    mcp:
-      - "mcp"
-      - "model-context-protocol"
-      - "mcp-server"
-    rag:
-      - "rag"
-      - "vector-db"
-      - "embeddings"
-      - "semantic-search"
-    diffusion:
-      - "diffusion"
-      - "stable-diffusion"
-      - "text-to-image"
-    speech-audio:
-      - "whisper"
-      - "speech-to-text"
-      - "tts"
-      - "asr"
-    browser-automation:
-      - "playwright"
-      - "puppeteer"
-      - "selenium"
-      - "browser-use"
-    database:
-      - "database"
-      - "sql"
-      - "nosql"
-      - "redis"
-      - "mongodb"
-    networking:
-      - "networking"
-      - "http"
-      - "grpc"
-      - "websocket"
-      - "proxy"
-    agent-skill:
-      - "agent-tool"
-      - "function-calling"
-      - "mcp-server"
+# 模型接入。地址、密钥和模型名都从环境变量读取，不写进这个文件。
+model:
+  base_url_env: STAR_SUMMARY_BASE_URL
+  api_key_env: STAR_SUMMARY_API_KEY
+  model_env: STAR_SUMMARY_MODEL
 
-  # 用途分类
-  purpose:
-    framework: ["framework", "library"]
-    tool: ["tool", "utility", "cli"]
-    learning: ["tutorial", "example", "demo"]
-    research: ["research", "paper", "academic"]
+brief_path: classify.yaml
