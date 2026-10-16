@@ -30,6 +30,12 @@ def _make_client(cfg):
     )
 
 
+def _output_plan(output_format, output_cfg):
+    """命令行 --format 优先，否则用 output.format。markdown 只写目录，both 两份都写，json 只写分类数据。"""
+    fmt = output_format or output_cfg.get("format") or "markdown"
+    return fmt in ("markdown", "both"), fmt in ("json", "both")
+
+
 def _make_cache(cfg):
     cache_cfg = cfg.get("cache", {})
     if not cache_cfg.get("enabled", True):
@@ -56,7 +62,7 @@ def generate(config_path, output, output_format, no_cache, force_refresh, max_re
         sys.exit(1)
 
     out_dir = Path(output or cfg["output"]["base_dir"])
-    fmt = output_format or cfg["output"]["format"]
+    write_md, write_json = _output_plan(output_format, cfg["output"])
 
     client = _make_client(cfg)
     cache = None if no_cache else _make_cache(cfg)
@@ -96,13 +102,13 @@ def generate(config_path, output, output_format, no_cache, force_refresh, max_re
         )
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    if fmt in ("markdown", "both"):
+    if write_md:
         md = render_markdown(items, brief)
         path = out_dir / cfg["output"]["markdown_filename"]
         path.write_text(md, encoding="utf-8")
         click.echo(f"Markdown 已保存: {path}")
 
-    if fmt in ("json", "both"):
+    if write_json:
         js = render_json(items)
         path = out_dir / cfg["output"]["json_filename"]
         path.write_text(js, encoding="utf-8")
@@ -135,7 +141,7 @@ def init(force):
         return
     template = """# star-summary 配置
 output:
-  format: both   # markdown | json | both
+  format: markdown   # markdown | json | both
   base_dir: output
   description_language: ""  # 留空用原描述。语言代号如 zh-cn、en
 

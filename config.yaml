@@ -2,7 +2,7 @@
 # 所有字段都有默认值，本文件可选。
 
 output:
-  format: both            # markdown | json | both
+  format: markdown        # markdown | json | both。默认只生成目录
   base_dir: output        # 输出目录
   markdown_filename: README.md
   json_filename: starred_repos.json

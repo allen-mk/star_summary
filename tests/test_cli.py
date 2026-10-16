@@ -55,6 +55,34 @@ def test_generate_json(tmp_path, monkeypatch):
     assert data["repositories"][0]["category"] == "编程工具"
 
 
+def _generate(tmp_path, monkeypatch, config_text):
+    monkeypatch.setenv("GITHUB_TOKEN", "fake")
+    _set_model_env(monkeypatch)
+    monkeypatch.setattr("star_summary.cli.GitHubClient", lambda **kw: FakeClient())
+    monkeypatch.setattr("star_summary.cli.ModelClient", FakeModel)
+    cfg = tmp_path / "config.yaml"
+    cfg.write_text(config_text, encoding="utf-8")
+    runner = CliRunner()
+    return runner.invoke(
+        cli,
+        ["generate", "--config", str(cfg), "--output", str(tmp_path / "out"), "--no-cache"],
+    )
+
+
+def test_format_markdown_skips_json_file(tmp_path, monkeypatch):
+    result = _generate(tmp_path, monkeypatch, "output:\n  format: markdown\n")
+    assert result.exit_code == 0, result.output
+    assert (tmp_path / "out" / "README.md").exists()
+    assert not (tmp_path / "out" / "starred_repos.json").exists()
+
+
+def test_format_both_writes_json_file(tmp_path, monkeypatch):
+    result = _generate(tmp_path, monkeypatch, "output:\n  format: both\n")
+    assert result.exit_code == 0, result.output
+    assert (tmp_path / "out" / "README.md").exists()
+    assert (tmp_path / "out" / "starred_repos.json").exists()
+
+
 def test_generate_both(tmp_path, monkeypatch):
     result = _invoke_generate(tmp_path, monkeypatch, ["--format", "both"])
     assert result.exit_code == 0, result.output

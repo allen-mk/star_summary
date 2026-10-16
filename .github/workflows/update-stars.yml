@@ -28,7 +28,7 @@ jobs:
           STAR_SUMMARY_BASE_URL: ${{ secrets.STAR_SUMMARY_BASE_URL }}
           STAR_SUMMARY_API_KEY: ${{ secrets.STAR_SUMMARY_API_KEY }}
           STAR_SUMMARY_MODEL: ${{ secrets.STAR_SUMMARY_MODEL }}
-        run: star-summary generate --format both --output output --no-cache
+        run: star-summary generate --output output --no-cache
 
       - name: Commit
         run: |

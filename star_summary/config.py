@@ -15,7 +15,7 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "per_page": 100,
     },
     "output": {
-        "format": "both",  # markdown | json | both
+        "format": "markdown",  # markdown | json | both
         "base_dir": "output",
         "markdown_filename": "README.md",
         "json_filename": "starred_repos.json",

@@ -8,7 +8,7 @@ from star_summary.config import load_config, model_ready
 def test_default_config(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     cfg = load_config()
-    assert cfg["output"]["format"] == "both"
+    assert cfg["output"]["format"] == "markdown"
     assert cfg["output"]["base_dir"] == "output"
     assert cfg["cache"]["enabled"] is True
 
